@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/sg5L6Jsq/Trust-Wallet-removebg-preview.png">
+    <title>Premium XP Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    backgroundImage: {
+                        'tw-gradient': 'linear-gradient(135deg, #002f7a 0%, #0a4bb3 50%, #2e1a91 100%)',
+                        'trust-btn': 'linear-gradient(90deg, #1c73e8 0%, #0ab1ff 100%)',
+                    },
+                    // **NEW**: Added a simple keyframe for a floating effect
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                    // **NEW**: Added an animation utility class
+                    animation: {
+                        float: 'float 4s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="min-h-screen bg-tw-gradient text-white relative overflow-x-hidden">
+
+    <div class="hidden lg:block absolute top-1/4 left-1/4 w-80 h-80 bg-blue-400 rounded-full mix-blend-lighten filter blur-3xl opacity-30 animate-pulse"></div>
+    <div class="hidden lg:block absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-500 rounded-full mix-blend-lighten filter blur-3xl opacity-30 animate-pulse delay-500"></div>
+
+    <div class="absolute top-0 left-0 w-full flex justify-between items-center px-4 sm:px-6 py-4 z-10">
+
+        <button 
+            class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 sm:px-4 py-2 rounded-xl border border-white/20 hover:bg-white/20 transition text-sm sm:text-base shadow-lg"
+        >
+            <img src="https://i.postimg.cc/sg5L6Jsq/Trust-Wallet-removebg-preview.png" class="w-6 sm:w-8" />
+            <span class="font-semibold whitespace-nowrap">Trust Premium XP</span>
+        </button>
+    </div>
+
+    <div class="flex flex-col items-center justify-center min-h-screen text-center px-4 pt-24 pb-12 w-full max-w-7xl mx-auto flex-grow">
+
+        <img 
+            src="https://i.postimg.cc/NfB22sLJ/Screenshot-2025-12-12-142250-removebg-preview.png"
+            class="w-[300px] sm:w-[400px] md:w-[500px] max-w-full drop-shadow-2xl animate-float z-0"
+            alt="Showcase">
+
+        <h1 class="mt-8 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight drop-shadow-xl">
+            Trust Wallet
+        </h1>
+
+        <p class="mt-4 text-xl opacity-95 max-w-lg">
+            The most trusted & secure crypto wallet.
+        </p>
+
+        <div class="grid grid-cols-2 gap-4 mt-8 w-full max-w-md">
+
+    <button onclick="window.open('https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409','_blank')" 
+        class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 rounded-xl py-4 transition hover:bg-white/30 shadow-lg">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/mac-os.png" class="w-5 filter grayscale">
+        <span class="font-semibold text-base sm:text-lg">Get for iOS</span>
+    </button>
+
+    <button onclick="window.open('https://chromewebstore.google.com/detail/trust-wallet/egjidjbpglichdcondbcbdnbeeppgdph?pli=1','_blank')" 
+        class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 rounded-xl py-4 transition hover:bg-white/30 shadow-lg">
+        <img src="https://img.icons8.com/color/48/chrome.png" class="w-5">
+        <span class="font-semibold text-base sm:text-lg">Extension</span>
+    </button>
+
+    <button onclick="window.open('https://trustwallet.com/download','_blank')" 
+        class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 rounded-xl py-4 transition hover:bg-white/30 shadow-lg">
+        <img src="https://img.icons8.com/fluency/48/android-os.png" class="w-5">
+        <span class="font-semibold text-base sm:text-lg">Get APK</span>
+    </button>
+
+    <button onclick="window.open('https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp&pli=1','_blank')" 
+        class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 rounded-xl py-4 transition hover:bg-white/30 shadow-lg">
+        <img src="https://img.icons8.com/color/48/google-play.png" class="w-5">
+        <span class="font-semibold text-base sm:text-lg">Google Play</span>
+    </button>
+
+</div>
+
+        
+        <div id="input-container" class="mt-8 w-full max-w-md hidden">
+            <label for="trust-wallet-handle" class="sr-only">Enter your trust wallet handle</label>
+            <input 
+                type="text" 
+                id="trust-wallet-handle" 
+                placeholder="Enter your trust wallet handle"
+                class="w-full py-4 px-6 rounded-xl bg-white/10 text-white placeholder-white/70 border-2 border-white/30 focus:border-white focus:outline-none transition"
+            />
+        </div>
+
+        <button id="main-action-button" class="mt-8 w-full max-w-md py-5 rounded-xl bg-trust-btn shadow-2xl shadow-blue-500/20 flex items-center justify-center gap-3 text-xl font-bold hover:opacity-95 transition hover:scale-[1.01] duration-300">
+            Enter Trust Wallet Handle
+        </button>
+
+        <p class="mt-4 text-sm opacity-80">
+            Make sure to enter a valid Trust Wallet handle
+        </p>
+
+        <div class="mt-8 text-xs opacity-60">
+            🔒 Secured by Trust Wallet
+        </div>
+
+    </div>
+
+    <script>
+        const button = document.getElementById('main-action-button');
+        const inputContainer = document.getElementById('input-container');
+        
+        // This is a flag to track the state
+        let isInputVisible = false;
+
+        button.addEventListener('click', () => {
+            if (!isInputVisible) {
+                // 1. Show the input field
+                inputContainer.classList.remove('hidden');
+                
+                // 2. Change the button text to "Submit"
+                button.innerHTML = 'Submit'; 
+
+                // 3. Update the state flag
+                isInputVisible = true;
+                
+                // Optional: Focus the input field after showing it
+                document.getElementById('trust-wallet-handle').focus();
+            } else {
+                // This is the action for the "Submit" click
+                const handle = document.getElementById('trust-wallet-handle').value;
+                
+                if (handle.trim() !== '') {
+                    alert('Submitting handle: ' + handle);
+                    // **TO DO:** Add your actual form submission logic here (e.g., fetch API call)
+                    
+                    // After successful submission, you might want to reset the state or redirect
+                    // For now, it just shows an alert.
+                } else {
+                    alert('Please enter your Trust Wallet handle before submitting.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
