@@ -233,18 +233,16 @@ async function handleClaimNow() {
             // Update the claim button to show success
             claimBtn.textContent = 'Claimed!';
             
-            // Close the modal after a short delay
+            // Close the modal and refresh the page after a short delay
             setTimeout(() => {
                 if (modal) {
                     modal.classList.remove('active');
                     document.body.style.overflow = 'auto';
                 }
-                
-                // Reset the button after the modal closes
+                // Refresh the page after a short delay to show the success message
                 setTimeout(() => {
-                    claimBtn.textContent = 'Claim Now';
-                    claimBtn.disabled = false;
-                }, 300);
+                    window.location.reload();
+                }, 500);
             }, 1000);
             
         } else {
