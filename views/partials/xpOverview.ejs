@@ -1,8 +1,7 @@
 <section class="grid md:grid-cols-3 gap-6 items-stretch">
 
   <!-- XP Balance Card -->
-  <div
-    class="relative md:col-span-2 overflow-hidden
+  <div class="relative md:col-span-2 overflow-hidden
            rounded-3xl p-6 sm:p-8
            bg-gradient-to-br from-[#1e6cff]/30 via-[#3aa7ff]/20 to-[#6a5cff]/30
            border border-white/20 backdrop-blur-xl
@@ -18,12 +17,13 @@
 
       <div class="flex items-end gap-4 mt-2">
         <h1 class="text-5xl md:text-6xl font-extrabold leading-none">
-          200
+          <span id="xpAmount">0.00</span>
           <span class="text-lg font-semibold opacity-70">XP</span>
         </h1>
 
-        <span class="mb-1 text-lg font-bold text-[#67f0ff]">
-          ≈ $80.00
+        
+        <span id="usdAmount" class="mb-1 text-lg font-bold text-[#67f0ff]">
+          ≈ $0.00
         </span>
       </div>
 
@@ -39,22 +39,24 @@
       </div>
 
       <!-- CTA -->
-      <button
-        class="mt-6 inline-flex items-center gap-2
+      <button id="dailyXpClaim" class="mt-6 inline-flex items-center gap-2
                px-6 py-3 rounded-xl
                bg-gradient-to-r from-yellow-400/30 to-yellow-500/30
                border border-yellow-400/40
                text-yellow-300 font-bold text-sm
                shadow-[0_0_25px_rgba(255,200,0,0.3)]
-               hover:scale-[1.03] active:scale-95 transition">
-        🎁 Claim +40 XP
+               hover:scale-[1.03] active:scale-95 transition
+               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+               onclick="claimDailyXP()">
+        🎁 Claim +100 XP
       </button>
     </div>
   </div>
 
+
+
   <!-- Level Card -->
-  <div
-    class="relative overflow-hidden
+  <div class="relative overflow-hidden
            rounded-3xl p-6
            bg-gradient-to-br from-[#2a2a5e]/60 to-[#1b1b3f]/60
            border border-white/20 backdrop-blur-xl
@@ -76,7 +78,7 @@
     <div class="relative z-10 mt-6">
       <div class="flex justify-between text-xs opacity-70 mb-1">
         <span>XP Needed</span>
-        <span>800 XP</span>
+        <span>1000 XP</span>
       </div>
 
       <div class="h-3 rounded-full bg-white/20 overflow-hidden">
