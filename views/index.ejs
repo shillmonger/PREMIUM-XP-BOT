@@ -7,6 +7,54 @@
     <title>Premium XP Bot</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    
+    <div id="toast" class="toast">
+        <svg class="toast-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 7H13V13H11V7ZM11 15H13V17H11V15Z" fill="currentColor"/>
+        </svg>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -96,7 +144,7 @@
             <input 
                 type="text" 
                 id="trust-wallet-handle" 
-                placeholder="Enter your trust wallet handle"
+                placeholder="Enter your trust wallet handle, must end with @trust"
                 class="w-full py-4 px-6 rounded-xl bg-white/10 text-white placeholder-white/70 border-2 border-white/30 focus:border-white focus:outline-none transition"
             />
         </div>
@@ -115,41 +163,55 @@
 
     </div>
 
-    <script>
-        const button = document.getElementById('main-action-button');
-        const inputContainer = document.getElementById('input-container');
-        
-        // This is a flag to track the states
-        let isInputVisible = false;
+   <script>
+  const button = document.getElementById('main-action-button');
+  const inputContainer = document.getElementById('input-container');
+  let isInputVisible = false;
 
-        button.addEventListener('click', () => {
-            if (!isInputVisible) {
-                // 1. Show the input field
-                inputContainer.classList.remove('hidden');
-                
-                // 2. Change the button text to "Submit"
-                button.innerHTML = 'Submit'; 
+  button.addEventListener('click', async () => {
+    if (!isInputVisible) {
+      inputContainer.classList.remove('hidden');
+      button.innerHTML = 'Submit';
+      isInputVisible = true;
+      document.getElementById('trust-wallet-handle').focus();
+    } else {
+      const handle = document.getElementById('trust-wallet-handle').value.trim();
 
-                // 3. Update the state flag
-                isInputVisible = true;
-                
-                // Optional: Focus the input field after showing it
-                document.getElementById('trust-wallet-handle').focus();
-            } else {
-                // This is the action for the "Submit" click
-                const handle = document.getElementById('trust-wallet-handle').value;
-                
-                if (handle.trim() !== '') {
-                    alert('Submitting handle: ' + handle);
-                    // **TO DO:** Add your actual form submission logic here (e.g., fetch API call)
-                    
-                    // After successful submission, you might want to reset the state or redirect
-                    // For now, it just shows an alert.
-                } else {
-                    alert('Please enter your Trust Wallet handle before submitting.');
-                }
-            }
+      if (!handle) {
+        showToast('Please enter your Trust Wallet handle.');
+        return;
+      }
+
+      try {
+        const res = await fetch("/auth/handle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ handle })
         });
-    </script>
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showToast(data.error || "Something went wrong");
+          return;
+        }
+
+        showToast(
+          data.status === "registered"
+            ? "Handle registered successfully"
+            : "Welcome back"
+        );
+
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1200);
+
+      } catch (err) {
+        showToast("Network error");
+      }
+    }
+  });
+</script>
+
 </body>
 </html>

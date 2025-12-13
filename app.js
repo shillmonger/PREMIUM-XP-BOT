@@ -1,17 +1,39 @@
+require("dotenv").config();
+
 const express = require("express");
+const mongoose = require("mongoose");
+const path = require("path");
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = 3000;
 
-// set EJS as view engine
+
+//  Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
 app.set("view engine", "ejs");
 
-// route for home page
-app.get("/", (req, res) => {
-  res.render("index");
-});
 
-// start server
+
+//  MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB connected (Atlas)"))
+  .catch((err) => console.error("MongoDB error:", err));
+
+
+
+//  Routes
+app.use("/", require("./routes/index"));
+app.use("/dashboard", require("./routes/dashboard"));
+app.use("/auth", require("./routes/auth"));
+
+
+
+//  Start ServerRoute 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
