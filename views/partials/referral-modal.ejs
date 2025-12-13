@@ -1,0 +1,128 @@
+<div id="referralModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden"
+    onclick="closeReferralModal()">
+
+    <!-- Modal Box -->
+    <div class="bg-white w-[95%] max-w-md rounded-2xl p-6 relative shadow-2xl border border-gray-100/80"
+        onclick="event.stopPropagation()">
+
+        <div class="absolute inset-0 bg-[#eefaff] rounded-2xl -z-10"></div>
+        <div class="absolute inset-x-0 top-0 h-1/4 bg-white/50 backdrop-blur-sm rounded-t-2xl -z-10"></div>
+
+
+
+        <!-- Close Button -->
+        <button onclick="closeReferralModal()"
+            class="absolute top-4 right-4 text-gray-900 font-bold hover:text-gray-800 transition text-2xl font-light">
+            &times;
+        </button>
+
+
+
+        <!-- HEADER -->
+        <div class="flex items-center gap-3 mb-6">
+            <div
+                class="w-11 h-11 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl shadow-lg shadow-purple-300/60">
+                👥
+            </div>
+            <h2 class="text-2xl font-extrabold text-[#3b4c73]">
+                Referral Program
+            </h2>
+        </div>
+
+
+
+        <!-- INVITES -->
+        <div
+            class="bg-white rounded-xl p-4 mb-6 border border-purple-200/50 shadow-md shadow-purple-100/50 flex items-center justify-between">
+            <div>
+                <span class="text-lg font-semibold text-gray-700 block">Friends Invited:</span>
+                <span class="text-sm text-gray-500">Invite more friends to earn bonus rewards!</span>
+            </div>
+            <span class="text-4xl font-extrabold text-purple-600">0</span>
+        </div>
+
+
+
+        <!-- LINK -->
+        <div class="mb-6">
+            <label class="text-base font-extrabold text-[#3b4c73] block mb-2">
+                Your Referral Link
+            </label>
+
+            <div class="flex gap-2">
+                <input id="referralLinkInput" type="text" value="Referral link will be available soon..." readonly
+                    class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600" />
+
+                <button onclick="copyReferralLink()" class="px-5 py-3 bg-blue-500 text-white rounded-xl font-bold">
+                    Copy
+                </button>
+            </div>
+        </div>
+
+
+
+
+        <!-- HOW IT WORKS -->
+        <div class="mb-8">
+            <h3 class="text-lg font-extrabold text-[#3b4c73] mb-3">
+                How It Works
+            </h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-sm mt-1 shadow-md">
+                        1</div>
+                    <div>
+                        <div class="text-base font-semibold text-gray-800">Copy your referral link</div>
+                        <div class="text-sm text-gray-500">Share it with your friends</div>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center text-sm mt-1 shadow-md">
+                        2</div>
+                    <div>
+                        <div class="text-base font-semibold text-gray-800">Friends join using your link</div>
+                        <div class="text-sm text-gray-500">They sign up and start earning</div>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-sm mt-1 shadow-md">
+                        3</div>
+                    <div>
+                        <div class="text-base font-semibold text-gray-800">Earn bonus rewards</div>
+                        <div class="text-sm text-gray-500">Get XP for each friend who joins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- SHEAR BUTTON  -->
+        <div class="flex gap-4">
+            <!-- Twitter -->
+            <button
+                class="flex-1 flex items-center justify-center gap-3 py-3 bg-[#1DA1F2] text-white rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-blue-300/50">
+
+                <img src="https://i.postimg.cc/ydkM1D2Q/Twitter-Logo.png" alt="Twitter"
+                    class="w-8 h-8 object-contain" />
+                Twitter
+            </button>
+
+            <!-- Telegram -->
+            <button
+                class="flex-1 flex items-center justify-center gap-3 py-3 bg-[#2AABEE] text-white rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-sky-300/50">
+
+                <img src="https://i.postimg.cc/8zGgRPrr/Telegram-Logo.png" alt="Telegram"
+                    class="w-8 h-8 object-contain" />
+                Telegram
+            </button>
+        </div>
+
+
+    </div>
+</div>

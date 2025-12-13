@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,79 +25,158 @@
   </script>
 </head>
 
-<body class="min-h-screen bg-tw-gradient text-white">
+<body class="min-h-screen bg-gradient-to-br from-[#0a2a78] via-[#103fb5] to-[#2c1b8f] text-white">
 
-  <!-- Top Bar -->
-  <header class="w-full flex justify-between items-center px-6 py-4 bg-white/10 backdrop-blur-md border-b border-white/20">
-    <div class="flex items-center gap-3">
-      <img src="https://i.postimg.cc/sg5L6Jsq/Trust-Wallet-removebg-preview.png" class="w-8" />
-      <span class="font-bold text-lg">Trust Premium XP</span>
+  <!-- Top Header -->
+  <header class="w-full px-6 py-2 bg-gradient-to-r from-[#1c6ae4] to-[#13b5ff] flex items-center justify-center">
+    <div class="flex items-center gap-2 font-bold text-[17px] md:text-base">
+      <img src="https://i.postimg.cc/sg5L6Jsq/Trust-Wallet-removebg-preview.png" class="w-8 sm:w-8" />
+      Trust Premium XP
     </div>
-
-    <a href="/" class="text-sm opacity-80 hover:opacity-100 transition">
-      Logout
-    </a>
   </header>
 
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-6 py-12">
 
-    <h1 class="text-4xl font-extrabold mb-2">Dashboard</h1>
-    <p class="opacity-80 mb-8">
-      Welcome to your Trust Premium XP dashboard
-    </p>
 
-    <!-- User Card -->
-    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
-      <h2 class="text-xl font-semibold mb-4">Your Trust Handle</h2>
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
 
-      <div class="flex items-center justify-between bg-black/30 rounded-xl px-5 py-4">
+    <!-- XP Section -->
+    <%- include('partials/xpOverview') %>
+
+
+
+
+
+
+      <!-- Greeting -->
+      <div class="mt-8 text-[17px] opacity-80">
+        Hi
         <span class="text-lg font-mono text-blue-300">
-          <% if (typeof user !== 'undefined' && user) { %>
+          <% if (typeof user !=='undefined' && user) { %>
             @<%= user.handle %>
-          <% } else { %>
-            @loading...
-          <% } %>
-        </span>
-
-        <span class="text-xs px-3 py-1 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
-          Verified
+              <% } else { %>
+                @loading...
+                <% } %>
         </span>
       </div>
 
-      <p class="text-sm opacity-70 mt-4">
-        This handle was registered through Trust Wallet Premium.
-      </p>
-    </div>
 
-    <!-- Placeholder Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6 text-center">
-        <p class="text-sm opacity-70">XP Balance</p>
-        <p class="text-3xl font-bold mt-2">0 XP</p>
-      </div>
 
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6 text-center">
-        <p class="text-sm opacity-70">Status</p>
-        <p class="text-3xl font-bold mt-2 text-blue-300">Premium</p>
-      </div>
+      <!-- Action Buttons -->
+      <section class="flex w-full gap-4 mt-6">
+        <!-- TASKS BUTTON -->
+        <button onclick="openTasksModal()"
+          class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#2786ff] to-[#19c6ff] font-bold shadow-lg">
+          TASKS
+        </button>
+        <%- include('partials/tasks-modal') %>
+          <script>
+            function openTasksModal() {
+              document.getElementById('tasksModal').classList.remove('hidden');
+              document.body.classList.add('overflow-hidden');
+            }
 
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6 text-center">
-        <p class="text-sm opacity-70">Wallet</p>
-        <p class="text-3xl font-bold mt-2">Trust</p>
-      </div>
+            function closeTasksModal() {
+              document.getElementById('tasksModal').classList.add('hidden');
+              document.body.classList.remove('overflow-hidden');
+            }
+          </script>
 
-    </div>
 
-    <!-- Call to Action -->
-    <div class="mt-12 text-center">
-      <button class="px-8 py-4 rounded-xl bg-trust-btn font-bold text-lg shadow-xl hover:opacity-95 transition">
-        Connect Wallet (Coming Soon)
-      </button>
-    </div>
+          <button class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
+            CASHOUT
+          </button>
+
+
+          <!-- REFERRAL BUTTON -->
+          <button onclick="openReferralModal()"
+            class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#ff4fd8] to-[#ff7a4f] font-bold shadow-lg">
+            REFERRAL
+          </button>
+          <%- include('partials/referral-modal') %>
+            <script>
+              function openReferralModal() {
+                document.getElementById('referralModal').classList.remove('hidden');
+              }
+
+              function closeReferralModal() {
+                document.getElementById('referralModal').classList.add('hidden');
+              }
+            </script>
+
+      </section>
+
+
+
+
+      <!-- Shield -->
+      <section class="flex justify-center mt-16">
+        <div class="relative w-full flex justify-center">
+
+          <!-- Trust Wallet Image -->
+          <img src="https://i.postimg.cc/k4RVNZFM/logo.png" alt="Trust Wallet" class="w-1/2 sm:w-40 md:w-50
+                drop-shadow-[0_50px_50px_rgba(0,0,0,0.65)]
+                select-none cursor-pointer
+                animate-zoom" />
+
+          <!-- Tap Button (Bottom Right of Image) -->
+          <button class="absolute -bottom-0 -right-0
+                   px-3 py-1.5 text-[10px] sm:text-xs
+                   rounded-full
+                   bg-black/50 border border-white/20
+                   backdrop-blur-md
+                   hover:bg-black/70 transition
+                   shadow-lg whitespace-nowrap">
+            TAP TO EARN XP
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Tailwind custom animation -->
+      <style>
+        @keyframes zoomInOut {
+
+          0%,
+          100% {
+            transform: scale(1);
+          }
+
+          50% {
+            transform: scale(1.2);
+          }
+        }
+
+        .animate-zoom {
+          animation: zoomInOut 2s ease-in-out infinite;
+        }
+      </style>
+
+
+
+
+
+
+      <!-- Energy Bar -->
+      <section class="mt-16">
+        <div class="flex font-bold justify-between text-xs opacity-80 mb-2">
+          <span class="text-[14px]">Energy</span>
+          <span class="text-[14px]">1000 ⚡</span>
+        </div>
+        <div class="h-5 w-full rounded-full bg-white/20 overflow-hidden">
+          <div class="h-full w-full bg-gradient-to-r from-[#2da8ff] to-[#6af5ff]"></div>
+        </div>
+      </section>
+
+
+      <!-- Active paid users  -->
+      <%- include('partials/recentCashouts', { cashouts }) %>
+
+
 
   </main>
 
 </body>
+
 </html>

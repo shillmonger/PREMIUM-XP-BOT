@@ -1,0 +1,116 @@
+<div id="tasksModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden"
+  onclick="closeTasksModal()">
+
+  <!-- Modal -->
+  <div class="bg-[#f4fbff] w-[95%] max-w-md rounded-2xl p-5 relative shadow-2xl" onclick="event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-extrabold text-[#2b4a7f]">
+        Earn more XP
+      </h2>
+      <button onclick="closeTasksModal()" class="text-gray-900 font-bold hover:text-gray-700 text-2xl">
+        &times;
+      </button>
+    </div>
+
+
+    <!-- Task List -->
+    <div class="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+
+      <!-- Task Item -->
+      <div class="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm opacity-60">
+        <div class="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+          🔒
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-gray-700">Watch Trust Wallet Tutorial</div>
+          <div class="text-sm text-gray-500">Watch a 30-second video</div>
+          <span class="inline-block mt-1 text-xs bg-gray-200 rounded-full px-2 py-1">
+            +10 XP
+          </span>
+        </div>
+      </div>
+
+
+      <div class="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm opacity-60">
+        <div class="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+          🔒
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-gray-700">Follow on Twitter</div>
+          <div class="text-sm text-gray-500">Follow our Twitter account</div>
+          <span class="inline-block mt-1 text-xs bg-gray-200 rounded-full px-2 py-1">
+            +15 XP
+          </span>
+        </div>
+      </div>
+
+
+      <div class="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm opacity-60">
+        <div class="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+          🔒
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-gray-700">Join Telegram Channel</div>
+          <div class="text-sm text-gray-500">Join our Telegram community</div>
+          <span class="inline-block mt-1 text-xs bg-gray-200 rounded-full px-2 py-1">
+            +12 XP
+          </span>
+        </div>
+      </div>
+
+
+      <div class="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm opacity-60">
+        <div class="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center">
+          🔒
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-gray-700">Watch Crypto Tips Video</div>
+          <div class="text-sm text-gray-500">Learn crypto in 1 minute</div>
+          <span class="inline-block mt-1 text-xs bg-gray-200 rounded-full px-2 py-1">
+            +10 XP
+          </span>
+        </div>
+      </div>
+
+
+
+      <!-- Completed Task -->
+      <div class="flex items-center gap-4 bg-green-50 rounded-xl p-4 border border-green-300">
+        <div class="w-12 h-12 bg-green-200 rounded-xl flex items-center justify-center">
+          ✅
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-green-700 line-through">
+            Share with Friends
+          </div>
+          <div class="text-sm text-green-600">
+            Share the app and earn bonus XP
+          </div>
+          <div class="flex items-center gap-2 mt-1 text-sm">
+            <span class="bg-green-200 rounded-full px-2 py-1">+20 XP</span>
+            <span class="text-green-600 font-semibold">Completed</span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Daily Check-in -->
+      <div class="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+          ✔️
+        </div>
+        <div class="flex-1">
+          <div class="font-bold text-gray-800">Daily Check-in</div>
+          <div class="text-sm text-gray-500">Check in daily to earn XP</div>
+        </div>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-xl font-bold">
+          Start
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<section
+  class="mt-8 bg-gradient-to-br from-[#3b57b7]/60 to-[#5a4db2]/60
+         backdrop-blur-xl border border-white/20
+         rounded-2xl overflow-hidden">
+
+  <!-- Header -->
+  <div class="px-5 py-4 flex items-center gap-2 border-b border-white/10">
+    <svg class="w-5 h-5 opacity-80" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M3 3h4v18H3V3zm7 6h4v12h-4V9zm7-4h4v16h-4V5z"/>
+    </svg>
+    <h3 class="font-bold text-[15px]">Recent Cashouts</h3>
+    <span class="ml-auto text-xs opacity-60 flex items-center">
+      <span class="w-2 h-2 rounded-full bg-green-400 mr-1.5 animate-pulse"></span>
+      <span>Live Updates</span>
+    </span>
+  </div>
+
+  <!-- List -->
+  <ul class="divide-y divide-white/10" id="cashoutsList">
+    <% cashouts.forEach((c, i) => { %>
+      <li class="flex items-center justify-between px-5 py-4">
+
+        <!-- Left -->
+        <div class="flex items-center gap-3">
+          <!-- Rank -->
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-full
+                   text-xs font-bold
+                   <%= i === 0 ? 'bg-yellow-400 text-black' :
+                       i === 1 ? 'bg-gray-300 text-black' :
+                       i === 2 ? 'bg-orange-400 text-black' :
+                       'bg-white/10 text-white' %>">
+            <%= i + 1 %>
+          </div>
+
+          <!-- User -->
+          <div>
+            <p class="font-semibold text-sm">
+              <%= c.handle %>
+            </p>
+            <p class="text-xs opacity-60">
+              <%= c.time %>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="text-right">
+          <p class="font-extrabold text-[#67f0ff] text-sm sm:text-base">
+            $<%= c.amount.toLocaleString() %>
+          </p>
+          <div class="flex items-center gap-1 justify-end text-xs opacity-70">
+            <span>Sent</span>
+            <svg class="w-4 h-4 text-[#67f0ff]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+
+      </li>
+    <% }) %>
+  </ul>
+
+  <script>
+    // Mock user data with @trust suffix
+    const mockUsers = [
+      { handle: 'CryptoKing@trust', amount: 1250 },
+      { handle: 'BitcoinBeast@trust', amount: 980 },
+      { handle: 'EthereumElite@trust', amount: 750 },
+      { handle: 'SatoshiSniper@trust', amount: 620 },
+      { handle: 'BlockchainBaron@trust', amount: 540 },
+      { handle: 'DeFiDuke@trust', amount: 430 },
+      { handle: 'MoonMaster@trust', amount: 390 },
+      { handle: 'HODLHero@trust', amount: 310 },
+      { handle: 'WhaleWatcher@trust', amount: 280 },
+      { handle: 'TokenTycoon@trust', amount: 240 }
+    ];
+
+    // Additional mock data for variety with @trust suffix
+    const additionalHandles = [
+      'CryptoQueen@trust', 'BitBaron@trust', 'EtherEagle@trust', 'SatoshiSage@trust', 'BlockBuster@trust',
+      'DeFiDiva@trust', 'MoonMaven@trust', 'HODLQueen@trust', 'WhaleHunter@trust', 'TokenTitan@trust',
+      'BitBaller@trust', 'EtherExpress@trust', 'SatoshiSensei@trust', 'BlockBoss@trust', 'DeFiDude@trust',
+      'MoonMagnet@trust', 'HODLMaster@trust', 'WhaleWhisperer@trust', 'TokenTrader@trust', 'BitBillionaire@trust'
+    ];
+
+    // Generate a random user
+    function generateRandomUser() {
+      const randomHandle = additionalHandles[Math.floor(Math.random() * additionalHandles.length)];
+      const randomAmount = Math.floor(Math.random() * 2000) + 100; // $100 - $2,100
+      return {
+        handle: randomHandle,
+        amount: randomAmount
+      };
+    }
+
+    // Format time as "X minutes ago"
+    function getTimeAgo() {
+      const minutes = Math.floor(Math.random() * 5) + 1; // 1-5 minutes ago
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    }
+
+    // Update the cashouts list
+    function updateCashouts() {
+      const cashoutsList = document.getElementById('cashoutsList');
+      if (!cashoutsList) return;
+
+      // Keep 1-3 existing users and add new ones
+      const keepCount = Math.floor(Math.random() * 3) + 1; // 1-3
+      const existingItems = Array.from(cashoutsList.children).slice(0, keepCount);
+      
+      // Generate new users to fill the list
+      const newUsers = [];
+      const totalItems = 10; // Total number of items to display
+      
+      // Add some existing users
+      existingItems.forEach((item, index) => {
+        const handle = item.querySelector('p.font-semibold').textContent;
+        const amount = parseInt(item.querySelector('p.font-extrabold').textContent.replace(/[^0-9]/g, ''));
+        newUsers.push({ handle, amount, time: getTimeAgo() });
+      });
+      
+      // Add new users
+      while (newUsers.length < totalItems) {
+        const user = Math.random() > 0.3 ? 
+          mockUsers[Math.floor(Math.random() * mockUsers.length)] : 
+          generateRandomUser();
+        
+        // Don't add duplicate handles
+        if (!newUsers.some(u => u.handle === user.handle)) {
+          newUsers.push({
+            handle: user.handle,
+            amount: user.amount,
+            time: getTimeAgo()
+          });
+        }
+      }
+
+      // Sort by amount in descending order
+      newUsers.sort((a, b) => b.amount - a.amount);
+
+      // Update the DOM
+      cashoutsList.innerHTML = newUsers.map((user, i) => `
+        <li class="flex items-center justify-between px-5 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold ${
+              i === 0 ? 'bg-yellow-400 text-black' :
+              i === 1 ? 'bg-gray-300 text-black' :
+              i === 2 ? 'bg-orange-400 text-black' :
+              'bg-white/10 text-white'
+            }">
+              ${i + 1}
+            </div>
+            <div>
+              <p class="font-semibold text-sm">${user.handle}</p>
+              <p class="text-xs opacity-60">${user.time}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-extrabold text-[#67f0ff] text-sm sm:text-base">
+              $${user.amount.toLocaleString()}
+            </p>
+            <div class="flex items-center gap-1 justify-end text-xs opacity-70">
+              <span>Sent</span>
+              <svg class="w-4 h-4 text-[#67f0ff]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+          </div>
+        </li>
+      `).join('');
+
+      // Schedule next update (10-15 seconds)
+      const nextUpdate = Math.floor(Math.random() * 5000) + 10000; // 10-15 seconds
+      setTimeout(updateCashouts, nextUpdate);
+    }
+
+    // Start the updates after the page loads
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(updateCashouts, 5000); // First update after 5 seconds
+      });
+    } else {
+      setTimeout(updateCashouts, 5000); // First update after 5 seconds
+    }
+  </script>
+</section>
