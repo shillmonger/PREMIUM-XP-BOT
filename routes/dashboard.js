@@ -49,7 +49,7 @@ router.post('/claim-xp', isAuthenticated, async (req, res) => {
       { 
         $inc: { 
           xpBalance: xpToAdd,
-          usdBalance: xpToAdd * 0.01 // Assuming 1 XP = $0.01
+          usdBalance: xpToAdd * 0.1 // 1 XP = $0.10
         } 
       },
       { new: true }
