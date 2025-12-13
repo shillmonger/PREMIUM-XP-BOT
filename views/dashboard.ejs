@@ -111,9 +111,25 @@
 
 
 <!-- CASHOUT BUTTON -->
-          <button class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
-            CASHOUT
-          </button>
+         <!-- CASHOUT BUTTON -->
+<button onclick="openCashoutModal()"
+  class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
+  CASHOUT
+</button>
+<%- include('partials/cashout-modal') %>
+<script>
+  function openCashoutModal() {
+    document.getElementById('cashoutModal').classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeCashoutModal() {
+    document.getElementById('cashoutModal').classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+</script>
+
+
 
 
           <!-- REFERRAL BUTTON -->
