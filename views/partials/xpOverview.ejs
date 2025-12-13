@@ -15,39 +15,48 @@
         Total XP Balance
       </p>
 
-<div class="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-4 mt-4">
-  
-  <!-- XP Amount -->
-  <div class="flex items-baseline gap-2">
-    <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-none tracking-tight">
-      <span id="xpAmount"><%= user.xpBalance ? user.xpBalance.toFixed(2) : '0.00' %></span>
-    </h1>
+      <div class="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-4 mt-4">
 
-    <span class="text-lg sm:text-xl font-semibold opacity-70">
-      XP
-    </span>
-  </div>
+        <!-- XP Amount -->
+        <div class="flex items-baseline gap-2">
+          <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-none tracking-tight">
+            <span id="xpAmount">
+              <%= user.xpBalance ? user.xpBalance.toFixed(2) : '0.00' %>
+            </span>
+          </h1>
 
-  <!-- USD Value -->
-  <span
-    id="usdAmount"
-    class="text-base sm:text-lg font-bold text-[#67f0ff] sm:mb-1">
-    ≈ $<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %>
-  </span>
+          <span class="text-lg sm:text-xl font-semibold opacity-70">
+            XP
+          </span>
+        </div>
 
-</div>
+        <!-- USD Value -->
+        <span id="usdAmount" class="text-base sm:text-lg font-bold text-[#67f0ff] sm:mb-1">
+          ≈ $<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %>
+        </span>
+
+      </div>
 
 
       <!-- Progress -->
       <div class="mt-6">
         <div class="flex justify-between text-xs opacity-70 mb-1">
           <span>Max withdrawal</span>
-          <span>$5,000</span>
+          <span>$<%= (user.usdBalance || 0).toFixed(2) %> / $5,000</span>
         </div>
+
         <div class="h-3 rounded-full bg-white/20 overflow-hidden">
-          <div class="h-full w-[20%] bg-gradient-to-r from-[#2da8ff] to-[#6af5ff]"></div>
+          <div id="withdrawalProgress"
+            class="h-full bg-gradient-to-r from-[#2da8ff] to-[#6af5ff] transition-all duration-1000 ease-out"
+            style="--progress: <%= Math.min(((user.usdBalance || 0) / 5000) * 100, 100) %>%;">
+            ></div>
+
         </div>
       </div>
+
+
+
+
 
       <!-- CTA -->
       <button id="dailyXpClaim" class="mt-6 inline-flex items-center gap-2
@@ -57,8 +66,7 @@
                text-yellow-300 font-bold text-sm
                shadow-[0_0_25px_rgba(255,200,0,0.3)]
                hover:scale-[1.03] active:scale-95 transition
-               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-               onclick="claimDailyXP()">
+               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" onclick="claimDailyXP()">
         🎁 Claim +1000 XP
       </button>
     </div>
