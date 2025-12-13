@@ -20,7 +20,7 @@
   <!-- XP Amount -->
   <div class="flex items-baseline gap-2">
     <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-none tracking-tight">
-      <span id="xpAmount">0.00</span>
+      <span id="xpAmount"><%= user.xpBalance ? user.xpBalance.toFixed(2) : '0.00' %></span>
     </h1>
 
     <span class="text-lg sm:text-xl font-semibold opacity-70">
@@ -31,9 +31,8 @@
   <!-- USD Value -->
   <span
     id="usdAmount"
-    class="text-base sm:text-lg font-bold text-[#67f0ff] sm:mb-1"
-  >
-    ≈ $0.00
+    class="text-base sm:text-lg font-bold text-[#67f0ff] sm:mb-1">
+    ≈ $<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %>
   </span>
 
 </div>
