@@ -20,20 +20,20 @@
       class="space-y-4 rounded-xl bg-blue-50 p-5 text-base border border-blue-200">
 
       <div class="flex justify-between">
-        <span class="text-[#1a6fff] font-medium">You'll Receive</span>
-        <span class="font-bold text-xl text-blue-900">$2019.20 USD</span>
+        <span class="text-[#1a6fff] font-medium">Available Balance</span>
+        <span class="font-bold text-xl text-blue-900">$<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %> USD</span>
       </div>
 
       <hr class="border-blue-200">
 
       <div class="flex justify-between text-sm">
-        <span class="text-gray-600">Network Fee (Gas)</span>
-        <span class="font-semibold text-gray-700">-$35.34 USD</span>
+        <span class="text-gray-600">Network Fee (2%)</span>
+        <span class="font-semibold text-gray-700">-<%= (user.usdBalance * 0.02).toFixed(2) %> USD</span>
       </div>
 
       <div class="flex justify-between pt-3 border-t border-dashed border-blue-200">
-        <span class="font-bold text-gray-800">Minimum Net Payout</span>
-        <span class="font-extrabold text-lg text-[#3bd3a8]">$1983.86 USD</span>
+        <span class="font-bold text-gray-800">You'll Receive</span>
+        <span class="font-extrabold text-lg text-[#3bd3a8]">$<%= (user.usdBalance * 0.98).toFixed(2) %> USD</span>
       </div>
     </div>
 

@@ -10,6 +10,13 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Sonner Toast -->
+  <script src="https://unpkg.com/sonner"></script>
+  <script>
+    // Expose Sonner to the global window object
+    window.toast = window.sonner.toast;
+  </script>
 
   <script>
     tailwind.config = {
@@ -110,7 +117,6 @@
 
 
 
-<!-- CASHOUT BUTTON -->
          <!-- CASHOUT BUTTON -->
 <button onclick="openCashoutModal()"
   class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">

@@ -59,16 +59,58 @@
 
 
       <!-- CTA -->
-      <button id="dailyXpClaim" class="mt-6 inline-flex items-center gap-2
-               px-6 py-3 rounded-xl
-               bg-gradient-to-r from-yellow-400/30 to-yellow-500/30
-               border border-yellow-400/40
-               text-yellow-300 font-bold text-sm
-               shadow-[0_0_25px_rgba(255,200,0,0.3)]
-               hover:scale-[1.03] active:scale-95 transition
-               disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" onclick="claimDailyXP()">
-        🎁 Claim +1000 XP
-      </button>
+      <div class="flex flex-col sm:flex-row gap-4 mt-6">
+        <button id="dailyXpClaim" class="inline-flex items-center justify-center gap-2
+                 px-6 py-3 rounded-xl
+                 bg-gradient-to-r from-yellow-400/30 to-yellow-500/30
+                 border border-yellow-400/40
+                 text-yellow-300 font-bold text-sm
+                 shadow-[0_0_25px_rgba(255,200,0,0.3)]
+                 hover:scale-[1.03] active:scale-95 transition
+                 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" onclick="claimDailyXP()">
+          🎁 Claim +1000 XP
+        </button>
+
+        <button id="cashoutBtn" class="inline-flex items-center justify-center gap-2
+                 px-6 py-3 rounded-xl
+                 bg-gradient-to-r from-green-500/30 to-emerald-500/30
+                 border border-emerald-400/40
+                 text-emerald-200 font-bold text-sm
+                 shadow-[0_0_25px_rgba(16,185,129,0.3)]
+                 hover:scale-[1.03] active:scale-95 transition
+                 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                 onclick="handleCashout()">
+          💰 Cashout
+        </button>
+      </div>
+
+      <script>
+        function handleCashout() {
+          const usdBalance = parseFloat('<%= user.usdBalance || 0 %>');
+          const MIN_CASHOUT = 5000;
+          
+          if (usdBalance >= MIN_CASHOUT) {
+            // Show the cashout modal
+            document.getElementById('cashoutModal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+          } else {
+            // Show error toast
+            window.toast.error('Insufficient Balance', {
+              description: `You need at least $${MIN_CASHOUT.toLocaleString()} USD to cash out.`,
+              duration: 5000,
+              position: 'top-center',
+              style: {
+                background: '#1f2937',
+                color: '#fff',
+                border: '1px solid #374151',
+                borderRadius: '0.5rem',
+                padding: '0.75rem 1rem',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              },
+            });
+          }
+        }
+      </script>
     </div>
   </div>
 
