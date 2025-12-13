@@ -109,11 +109,6 @@
           </script>
 
 
-          <button class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
-            CASHOUT
-          </button>
-
-
           <!-- REFERRAL BUTTON -->
           <button onclick="openReferralModal()"
             class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#ff4fd8] to-[#ff7a4f] font-bold shadow-lg">
@@ -129,6 +124,12 @@
                 document.getElementById('referralModal').classList.add('hidden');
               }
             </script>
+
+
+<!-- CASHOUT BUTTON -->
+          <button class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
+            CASHOUT
+          </button>
 
       </section>
 
@@ -216,6 +217,154 @@
 
 <div id="xpContainer"></div>
 <script src="/js/dashboard.js"></script>
-</body>
 
+
+
+    <!-- Claim Points Modal -->
+    <div id="claimPointsModal" class="claim-modal">
+      <div class="claim-modal-content">
+        <h2>Claim Your Points!</h2>
+        <p>You've accumulated enough XP to claim your rewards!</p>
+        <div class="claim-amount" id="claimAmount">1000 XP</div>
+        <button id="claimPointsBtn" class="claim-button">Claim Now</button>
+      </div>
+    </div>
+
+    <style>
+      /* Claim Points Modal */
+      .claim-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .claim-modal.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .claim-modal-content {
+        background: linear-gradient(135deg, #0a2a78 0%, #1c6ae4 100%);
+        padding: 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+
+      .claim-modal.active .claim-modal-content {
+        transform: translateY(0);
+      }
+
+      .claim-modal h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #fff;
+      }
+
+      .claim-amount {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #00ff9d;
+        margin: 1rem 0;
+        text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+      }
+
+      .claim-button {
+        background: linear-gradient(90deg, #00ff9d 0%, #00ccff 100%);
+        border: none;
+        color: #000;
+        font-weight: bold;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+      }
+
+      .claim-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 255, 157, 0.4);
+      }
+
+      .claim-button:active {
+        transform: translateY(0);
+      }
+    </style>
+
+    <script>
+      // Function to show claim points modal
+      function showClaimPointsModal() {
+        const modal = document.getElementById('claimPointsModal');
+        const claimAmount = document.getElementById('claimAmount');
+        const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
+        
+        if (currentXP >= 1000) {
+          claimAmount.textContent = '1000 XP';
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      // Function to close claim points modal
+      function closeClaimPointsModal() {
+        const modal = document.getElementById('claimPointsModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+
+      // Close modal when clicking outside
+      document.getElementById('claimPointsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeClaimPointsModal();
+        }
+      });
+
+      // Handle claim points button click
+      document.getElementById('claimPointsBtn').addEventListener('click', function() {
+        const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
+        if (currentXP >= 1000) {
+          // Deduct 1000 XP
+          const newXP = currentXP - 1000;
+          document.getElementById('xpAmount').textContent = newXP.toFixed(2);
+          
+          // Update USD amount
+          const usdAmount = newXP * 0.1; // Assuming XP_TO_USD_RATE is 0.1
+          document.getElementById('usdAmount').textContent = `≈ $${usdAmount.toFixed(2)}`;
+          
+          // Show success message
+          const claimBtn = document.getElementById('claimPointsBtn');
+          claimBtn.textContent = 'Claimed!';
+          claimBtn.disabled = true;
+          
+          // Close modal after delay
+          setTimeout(() => {
+            closeClaimPointsModal();
+            // Reset button after modal closes
+            setTimeout(() => {
+              claimBtn.textContent = 'Claim Now';
+              claimBtn.disabled = false;
+            }, 300);
+          }, 1000);
+        }
+      });
+    </script>
+  </body>
 </html>

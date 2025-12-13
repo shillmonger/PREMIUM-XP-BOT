@@ -1,6 +1,7 @@
 const express = require("express");
-const router = express.Router(); // ✅ THIS LINE WAS MISSING
+const router = express.Router();
 const User = require("../models/User");
+const { isAuthenticated } = require('../middleware/auth');
 
 router.get("/", async (req, res) => {
   try {
@@ -33,6 +34,39 @@ router.get("/", async (req, res) => {
     return res.status(500).render("error", {
       message: "Error loading dashboard"
     });
+  }
+});
+
+// Route to handle XP claim
+router.post('/claim-xp', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const xpToAdd = 1000;
+    
+    // Update user's XP and USD balance
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { 
+        $inc: { 
+          xpBalance: xpToAdd,
+          usdBalance: xpToAdd * 0.01 // Assuming 1 XP = $0.01
+        } 
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.json({ 
+      success: true, 
+      xpBalance: updatedUser.xpBalance,
+      usdBalance: updatedUser.usdBalance
+    });
+  } catch (error) {
+    console.error('Error claiming XP:', error);
+    res.status(500).json({ success: false, message: 'Error claiming XP' });
   }
 });
 
