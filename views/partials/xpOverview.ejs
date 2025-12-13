@@ -15,17 +15,29 @@
         Total XP Balance
       </p>
 
-      <div class="flex items-end gap-4 mt-2">
-        <h1 class="text-5xl md:text-6xl font-extrabold leading-none">
-          <span id="xpAmount">0.00</span>
-          <span class="text-lg font-semibold opacity-70">XP</span>
-        </h1>
+<div class="flex flex-col sm:flex-row sm:items-end gap-2 sm:gap-4 mt-4">
+  
+  <!-- XP Amount -->
+  <div class="flex items-baseline gap-2">
+    <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-none tracking-tight">
+      <span id="xpAmount">0.00</span>
+    </h1>
 
-        
-        <span id="usdAmount" class="mb-1 text-lg font-bold text-[#67f0ff]">
-          ≈ $0.00
-        </span>
-      </div>
+    <span class="text-lg sm:text-xl font-semibold opacity-70">
+      XP
+    </span>
+  </div>
+
+  <!-- USD Value -->
+  <span
+    id="usdAmount"
+    class="text-base sm:text-lg font-bold text-[#67f0ff] sm:mb-1"
+  >
+    ≈ $0.00
+  </span>
+
+</div>
+
 
       <!-- Progress -->
       <div class="mt-6">

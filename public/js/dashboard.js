@@ -8,50 +8,53 @@ const MAX_ENERGY = 1000;
 const ENERGY_PER_TAP = 20;
 const ENERGY_REGEN_RATE = 10; // per second
 
+// In-memory storage
+let xp = 0;
+let energy = MAX_ENERGY;
+
 /* ===== XP ===== */
 function getXP() {
-    return Number(localStorage.getItem("xp") || 0);
+    return xp;
 }
 
 function setXP(value) {
-    localStorage.setItem("xp", value);
+    xp = value;
     updateXPUI();
 }
 
 function addXP(amount) {
-    setXP(getXP() + amount);
+    setXP(xp + amount);
 }
 
 function updateXPUI() {
-    const xp = getXP();
-    const usd = xp * XP_TO_USD_RATE;
+    const currentXP = getXP();
+    const usd = currentXP * XP_TO_USD_RATE;
 
     const xpEl = document.getElementById("xpAmount");
     const usdEl = document.getElementById("usdAmount");
 
-    if (xpEl) xpEl.textContent = xp.toFixed(2);
+    if (xpEl) xpEl.textContent = currentXP.toFixed(2);
     if (usdEl) usdEl.textContent = `≈ $${usd.toFixed(2)}`;
 }
 
 /* ===== ENERGY ===== */
 function getEnergy() {
-    return Number(localStorage.getItem("energy") || MAX_ENERGY);
+    return energy;
 }
 
 function setEnergy(value) {
-    const energy = Math.max(0, Math.min(MAX_ENERGY, value));
-    localStorage.setItem("energy", energy);
+    energy = Math.max(0, Math.min(MAX_ENERGY, value));
     updateEnergyUI();
 }
 
 function updateEnergyUI() {
-    const energy = getEnergy();
-    const percent = (energy / MAX_ENERGY) * 100;
+    const currentEnergy = getEnergy();
+    const percent = (currentEnergy / MAX_ENERGY) * 100;
 
     const energyEl = document.getElementById("energyAmount");
     const barEl = document.getElementById("energyBar");
 
-    if (energyEl) energyEl.textContent = Math.floor(energy);
+    if (energyEl) energyEl.textContent = Math.floor(currentEnergy);
     if (barEl) barEl.style.width = `${percent}%`;
 }
 
@@ -86,42 +89,32 @@ function createXPPopup(x, y) {
 
 // Function to check if daily XP can be claimed
 function canClaimDailyXP() {
-    const lastClaim = localStorage.getItem('lastDailyClaim');
-    if (!lastClaim) return true;
-    
-    const lastClaimDate = new Date(parseInt(lastClaim));
-    const now = new Date();
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    
-    return (now - lastClaimDate) >= oneDayInMs;
+    // Always return true to allow claiming daily XP on every page load
+    return true;
 }
 
 // Function to update the claim button state
 function updateClaimButton() {
-    const claimButton = document.getElementById('dailyXpClaim');
-    if (!claimButton) return;
+    const claimBtn = document.getElementById('claimDailyBtn');
+    if (!claimBtn) return;
     
-    const lastClaim = localStorage.getItem('lastDailyClaim');
-    if (!lastClaim) {
-        claimButton.disabled = false;
-        claimButton.innerHTML = '🎁 Claim +100 XP';
-        return;
-    }
-    
-    const lastClaimDate = new Date(parseInt(lastClaim));
-    const now = new Date();
-    const timeDiff = now - lastClaimDate;
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const timeLeft = oneDayInMs - timeDiff;
-    
-    if (timeLeft <= 0) {
-        claimButton.disabled = false;
-        claimButton.innerHTML = '🎁 Claim +100 XP';
+    if (lastClaim === null) {
+        claimBtn.textContent = 'Claim Daily XP';
+        claimBtn.disabled = false;
     } else {
-        claimButton.disabled = true;
-        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        claimButton.innerHTML = `🕒 Next claim in ${hours}h ${minutes}m`;
+        const lastClaimDate = new Date(lastClaim);
+        const now = new Date();
+        const timeDiff = now - lastClaimDate;
+        const oneDayInMs = 24 * 60 * 60 * 1000;
+        const timeLeft = oneDayInMs - timeDiff;
+        
+        if (timeLeft <= 0) {
+            claimBtn.textContent = 'Claim Daily XP';
+            claimBtn.disabled = false;
+        } else {
+            claimBtn.textContent = `Next claim in ${Math.floor(timeLeft / (1000 * 60 * 60))}h ${Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))}m`;
+            claimBtn.disabled = true;
+        }
     }
 }
 
@@ -129,25 +122,20 @@ function updateClaimButton() {
 function claimDailyXP() {
     if (!canClaimDailyXP()) return;
     
-    // Add XP
-    addXP(100);
+    // Add XP (e.g., 1000 XP for daily claim)
+    addXP(1000);
     
     // Update last claim time
-    localStorage.setItem('lastDailyClaim', Date.now().toString());
+    lastClaim = Date.now();
     
-    // Update button state
+    // Update UI
     updateClaimButton();
     
     // Show success message
-    const xpAmount = document.getElementById('xpAmount');
-    if (xpAmount) {
-        xpAmount.textContent = (parseFloat(xpAmount.textContent) + 100).toFixed(2);
-    }
-    
-    // Create a visual feedback
-    const claimButton = document.getElementById('dailyXpClaim');
-    if (claimButton) {
-        claimButton.innerHTML = '✅ Claimed!';
+    const claimBtn = document.getElementById('claimDailyBtn');
+    if (claimBtn) {
+        claimBtn.textContent = 'Claimed!';
+        claimBtn.disabled = true;
         setTimeout(updateClaimButton, 2000);
     }
 }
@@ -194,5 +182,4 @@ if (document.readyState === 'loading') {
     // `DOMContentLoaded` has already fired, initialize immediately
     initApp();
 }
-
 
