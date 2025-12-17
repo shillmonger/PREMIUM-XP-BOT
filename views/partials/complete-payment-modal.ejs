@@ -1,0 +1,183 @@
+<div id="qrModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden" data-amount="$<%= (user.usdBalance * 0.02).toFixed(2) %>">
+
+
+    <div class="w-[90%] max-w-md rounded-2xl bg-white p-7 shadow-2xl relative transform transition-all duration-300">
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="text-xl font-extrabold text-[#000]">Complete Payment</h3>
+            <button onclick="closeQrModal()"
+                class="text-gray-400 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100">
+                ✕
+            </button>
+        </div>
+
+
+        <div class="text-center space-y-4">moved
+            <p class="font-medium text-gray-500 mb-3 text-sm" id="qrModalTitle"></p>
+
+            <div id="qrCodePlaceholder"
+                class="mx-auto border p-2 rounded-xl h-48 w-48 flex items-center justify-center bg-gray-50">
+                <p class="text-gray-500 text-sm">QR Code Image</p>
+            </div>
+
+            <p class="text-sm font-medium text-gray-500">Scan this code or copy the address below.</p>
+
+            <div class="bg-gray-100 p-4 rounded-xl break-all text-sm font-mono flex justify-between items-center" data-address-copy-btn>
+                <span id="walletAddressDisplay" class="truncate text-gray-800" data-wallet-address></span>
+                <button type="button" class="ml-3 text-blue-600 hover:text-blue-800 transition" onclick="copyWalletAddress(event)" data-copy-btn>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                        <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h4a2 2 0 00-2-2H5z" />
+                    </svg>
+                </button>
+            </div>
+
+
+            <div class="pt-2">
+                <p class="text-sm text-gray-500">
+                    Send exactly <span class="font-extrabold text-lg text-blue-500">$<%= (user.usdBalance *
+                            0.02).toFixed(2) %></span> USD
+                </p>
+                <p class="text-xs font-medium text-gray-700 mt-1">
+                    Payment will be processed after 1 network confirmation.
+                </p>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Expiration time</span>
+                    <span id="qrCountdown" class="font-bold text-blue-600">20:00</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="qrProgressBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000"
+                        style="width: 100%">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    // ---------------------------
+    // QR MODAL COUNTDOWN STATE
+    // ---------------------------
+    let qrCountdownInterval = null;
+    const QR_TOTAL_TIME = 20 * 60; // 20 minutes
+    let qrTimeLeft = QR_TOTAL_TIME;
+
+    // ---------------------------
+    // SHOW QR MODAL
+    // ---------------------------
+   function showQrModal(amount, walletAddress, qrCodeData) {
+    const qrModal = document.getElementById('qrModal');
+    const qrModalTitle = document.getElementById('qrModalTitle');
+    const walletAddressDisplay = document.getElementById('walletAddressDisplay');
+    const qrCodePlaceholder = document.getElementById('qrCodePlaceholder');
+
+    qrModalTitle.innerHTML = `Amount to Cashout <span class="font-extrabold text-lg text-gray-800">$${amount}</span> USDT`;
+    walletAddressDisplay.textContent = walletAddress;
+    walletAddressDisplay.dataset.walletAddress = walletAddress;
+
+    qrCodePlaceholder.innerHTML = qrCodeData
+        ? `<img src="${qrCodeData}" class="h-full w-full object-contain" />`
+        : `<p class="text-gray-500 text-sm">QR Code will appear here</p>`;
+
+    qrModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    startQrCountdown();
+}
+
+
+    // ---------------------------
+    // QR COUNTDOWN LOGIC
+    // ---------------------------
+    function startQrCountdown() {
+        const countdownEl = document.getElementById('qrCountdown');
+        const progressBar = document.getElementById('qrProgressBar');
+
+        if (qrCountdownInterval) clearInterval(qrCountdownInterval);
+
+        qrTimeLeft = QR_TOTAL_TIME;
+        updateQrCountdownUI();
+
+        qrCountdownInterval = setInterval(() => {
+            qrTimeLeft--;
+            updateQrCountdownUI();
+
+            if (qrTimeLeft <= 0) {
+                clearInterval(qrCountdownInterval);
+                closeQrModal();
+            }
+        }, 1000);
+
+        function updateQrCountdownUI() {
+            const minutes = Math.floor(qrTimeLeft / 60);
+            const seconds = qrTimeLeft % 60;
+
+            countdownEl.textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            const progress = (qrTimeLeft / QR_TOTAL_TIME) * 100;
+            progressBar.style.width = `${Math.max(0, progress)}%`;
+
+            if (qrTimeLeft <= 60) {
+                countdownEl.classList.add('text-red-500');
+                progressBar.classList.remove('bg-blue-500');
+                progressBar.classList.add('bg-red-500');
+            } else {
+                countdownEl.classList.remove('text-red-500');
+                progressBar.classList.remove('bg-red-500');
+                progressBar.classList.add('bg-blue-500');
+            }
+        }
+    }
+
+    // ---------------------------
+    // CLOSE QR MODAL
+    // ---------------------------
+    function closeQrModal() {
+        if (qrCountdownInterval) clearInterval(qrCountdownInterval);
+
+        document.getElementById('qrModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // ---------------------------
+    // COPY WALLET ADDRESS
+    // ---------------------------
+    function copyWalletAddress(event) {
+        const walletAddress = document.getElementById('walletAddressDisplay').textContent;
+
+        navigator.clipboard.writeText(walletAddress).then(() => {
+            const btn = event.currentTarget;
+            const originalHTML = btn.innerHTML;
+
+            btn.innerHTML = '✓ Copied!';
+            btn.classList.add('text-green-600');
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('text-green-600');
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy address:', err);
+        });
+    }
+
+    // ---------------------------
+    // CLOSE ON BACKDROP CLICK
+    // ---------------------------
+    document.getElementById('qrModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeQrModal();
+        }
+    });
+</script>

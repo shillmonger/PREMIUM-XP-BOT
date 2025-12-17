@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-extrabold text-[#1a6fff]">
-        💰 Payment Details
+        Payment Details
       </h2>
       <button onclick="closeCashoutModal()"
         class="text-gray-400 hover:text-gray-700 transition p-1 rounded-full hover:bg-gray-100">
@@ -20,20 +20,20 @@
       class="space-y-4 rounded-xl bg-blue-50 p-5 text-base border border-blue-200">
 
       <div class="flex justify-between">
-        <span class="text-[#1a6fff] font-medium">Available Balance</span>
-        <span class="font-bold text-xl text-blue-900">$<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %> USD</span>
+        <span class="font-bold text-[#1a6fff] font-medium">Available Balance</span>
+        <span class="font-bold text-xl text-gray-800">$<%= user.usdBalance ? user.usdBalance.toFixed(2) : '0.00' %></span>
       </div>
 
       <hr class="border-blue-200">
 
       <div class="flex justify-between text-sm">
         <span class="text-gray-600">Network Fee (2%)</span>
-        <span class="font-semibold text-gray-700">-<%= (user.usdBalance * 0.02).toFixed(2) %> USD</span>
+        <span class="font-bold text-gray-800">-<%= (user.usdBalance * 0.02).toFixed(2) %> USD</span>
       </div>
 
       <div class="flex justify-between pt-3 border-t border-dashed border-blue-200">
         <span class="font-bold text-gray-800">You'll Receive</span>
-        <span class="font-extrabold text-lg text-[#3bd3a8]">$<%= (user.usdBalance * 0.98).toFixed(2) %> USD</span>
+        <span class="font-extrabold text-lg text-gray-800">$<%= (user.usdBalance * 0.98).toFixed(2) %></span>
       </div>
     </div>
 
@@ -48,9 +48,15 @@
 
         <div class="flex items-center gap-4">
           <div
-            class="h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-r from-[#2786ff] to-[#19c6ff] text-white">
-            💳
-          </div>
+  class="h-15 w-15 flex items-center justify-center rounded-lg bg-white"
+>
+  <img
+    src="https://i.postimg.cc/PfSypXt7/Cryptomus-logo.png"
+    alt="Cryptomus logo"
+    class="h-10 w-10 object-contain"
+  />
+</div>
+
           <div>
             <span class="font-bold text-gray-800 block">Cryptomus</span>
             <span class="text-xs text-gray-500">Fast, secure, and reliable</span>
@@ -58,17 +64,27 @@
         </div>
 
         <div
-          class="h-6 w-6 flex items-center justify-center rounded-full bg-[#2786ff] text-white shadow-md">
+          class="font-bold h-6 w-6 flex items-center justify-center rounded-full bg-[#2786ff] text-white shadow-md">
           ✓
         </div>
       </div>
     </div>
 
     <!-- CTA -->
-    <button
+    <button onclick="openFormModal()"
       class="mt-8 w-full rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] py-3.5 font-extrabold text-white text-lg shadow-xl hover:opacity-95 transition transform hover:-translate-y-0.5">
       Proceed to Cashout
     </button>
 
   </div>
 </div>
+
+<!-- Include the form modal -->
+<%- include('form-modal') %>
+
+<script>
+  function closeCashoutModal() {
+    document.getElementById('cashoutModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+</script>
