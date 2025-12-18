@@ -9,16 +9,16 @@ router.get("/", isAuthenticated, (req, res) => {
     const user = req.user;
 
     const cashouts = [
-      { handle: "stormben@trust", amount: 2500.75, time: "12:50 PM" },
-      { handle: "greenkay@trust", amount: 12500.00, time: "12:50 PM" },
+      { handle: "stormben@trust", amount: 50500.75, time: "12:50 PM" },
+      { handle: "greenkay@trust", amount: 192500.00, time: "12:50 PM" },
       { handle: "gemvex@trust", amount: 50000.00, time: "12:50 PM" },
       { handle: "thunderhex@trust", amount: 25000.00, time: "12:50 PM" },
       { handle: "trustsam@trust", amount: 10500.00, time: "12:50 PM" },
-      { handle: "orangemay@trust", amount: 3500.50, time: "12:50 PM" },
-      { handle: "rubypex@trust", amount: 6000.25, time: "12:49 PM" },
+      { handle: "orangemay@trust", amount: 35000.50, time: "12:50 PM" },
+      { handle: "rubypex@trust", amount: 60010.25, time: "12:49 PM" },
       { handle: "greenmax@trust", amount: 50000.00, time: "12:49 PM" },
       { handle: "popmon@trust", amount: 80000.00, time: "12:49 PM" },
-      { handle: "Venom@trust", amount: 95010.00, time: "12:49 PM" }
+      { handle: "Venom@trust", amount: 950100.00, time: "12:49 PM" }
     ];
 
     return res.render("dashboard", {

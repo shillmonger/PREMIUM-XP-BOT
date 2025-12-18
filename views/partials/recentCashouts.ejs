@@ -65,16 +65,16 @@
   <script>
     // Mock user data with @trust suffix
     const mockUsers = [
-      { handle: 'CryptoKing@trust', amount: 1250 },
-      { handle: 'BitcoinBeast@trust', amount: 980 },
-      { handle: 'EthereumElite@trust', amount: 750 },
-      { handle: 'SatoshiSniper@trust', amount: 620 },
-      { handle: 'BlockchainBaron@trust', amount: 540 },
-      { handle: 'DeFiDuke@trust', amount: 430 },
-      { handle: 'MoonMaster@trust', amount: 390 },
-      { handle: 'HODLHero@trust', amount: 310 },
-      { handle: 'WhaleWatcher@trust', amount: 280 },
-      { handle: 'TokenTycoon@trust', amount: 240 }
+      { handle: 'CryptoKing@trust', amount: 95050 },
+      { handle: 'BitcoinBeast@trust', amount: 10000 },
+      { handle: 'EthereumElite@trust', amount: 12000 },
+      { handle: 'SatoshiSniper@trust', amount: 60000 },
+      { handle: 'BlockchainBaron@trust', amount: 50000 },
+      { handle: 'DeFiDuke@trust', amount: 40050 },
+      { handle: 'MoonMaster@trust', amount: 39000 },
+      { handle: 'HODLHero@trust', amount: 31000 },
+      { handle: 'WhaleWatcher@trust', amount: 28000 },
+      { handle: 'TokenTycoon@trust', amount: 240000 }
     ];
 
     // Additional mock data for variety with @trust suffix
@@ -85,10 +85,10 @@
       'MoonMagnet@trust', 'HODLMaster@trust', 'WhaleWhisperer@trust', 'TokenTrader@trust', 'BitBillionaire@trust'
     ];
 
-    // Generate a random user
+    // Generate a random user with minimum amount of 5000
     function generateRandomUser() {
       const randomHandle = additionalHandles[Math.floor(Math.random() * additionalHandles.length)];
-      const randomAmount = Math.floor(Math.random() * 2000) + 100; // $100 - $2,100
+      const randomAmount = Math.floor(Math.random() * 2000) + 5000; // $5000 - $7000
       return {
         handle: randomHandle,
         amount: randomAmount

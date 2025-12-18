@@ -1,7 +1,7 @@
 // <!-- SCRIPT TO ADD BALANCE  -->
 
 /* ===== CONFIG ===== */
-const XP_PER_TAP = 100;
+const XP_PER_TAP = 20;
 const XP_TO_USD_RATE = 0.1;
 
 const MAX_ENERGY = 1000;
@@ -62,7 +62,7 @@ function updateEnergyUI() {
 function createXPPopup(x, y) {
     const xp = document.createElement('div');
     xp.className = 'xp-popup';
-    xp.textContent = '100XP';
+    xp.textContent = '20XP';
 
     // Random position around the click
     const offsetX = (Math.random() * 100 - 50);
