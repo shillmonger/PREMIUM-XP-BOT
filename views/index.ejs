@@ -202,9 +202,12 @@
             : "Welcome back"
         );
 
-        setTimeout(() => {
-          window.location.href = "/dashboard";
-        }, 1200);
+        // ✅ Redirect to dashboard after short delay
+setTimeout(() => {
+  if (data.redirect) {
+    window.location.href = data.redirect;
+  }
+}, 500);
 
       } catch (err) {
         showToast("Network error");

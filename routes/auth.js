@@ -16,7 +16,7 @@ router.post("/handle", async (req, res) => {
 
     handle = handle.toLowerCase().trim();
 
-    // ✅ enforce @trust
+    // Enforce @trust
     if (!handle.endsWith("@trust")) {
       return res.status(400).json({
         error: "Handle must end with @trust"
@@ -24,27 +24,28 @@ router.post("/handle", async (req, res) => {
     }
 
     let user = await User.findOne({ handle });
-
     let status;
 
     if (!user) {
-      // ✅ register
+      // Register
       user = await User.create({ handle });
       status = "registered";
     } else {
       status = "logged_in";
     }
 
-    // ✅ LOG USER INTO SESSION
+    // Log user into session
     req.login(user, (err) => {
       if (err) {
         console.error("Login error:", err);
         return res.status(500).json({ error: "Login failed" });
       }
 
+      // ✅ Explicitly send redirect path
       return res.json({
         success: true,
         status,
+        redirect: "/dashboard", // tell front-end to redirect
         user: {
           id: user._id,
           handle: user.handle,
