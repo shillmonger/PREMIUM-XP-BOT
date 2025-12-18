@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const connectDB = require("../config/db");
 const User = require("../models/User");
 
+// Handle-based login/register
 router.post("/handle", async (req, res) => {
   try {
+    await connectDB();
+
     let { handle } = req.body;
 
     if (!handle) {
@@ -12,41 +16,46 @@ router.post("/handle", async (req, res) => {
 
     handle = handle.toLowerCase().trim();
 
-    const regex = /^[a-zA-Z0-9_]{3,20}@trust$/;
-    if (!regex.test(handle)) {
-      return res.status(400).json({ error: "Invalid Trust Wallet handle" });
+    // ✅ enforce @trust
+    if (!handle.endsWith("@trust")) {
+      return res.status(400).json({
+        error: "Handle must end with @trust"
+      });
     }
 
     let user = await User.findOne({ handle });
 
+    let status;
+
     if (!user) {
+      // ✅ register
       user = await User.create({ handle });
+      status = "registered";
+    } else {
+      status = "logged_in";
     }
-    
-    // Set up the session
-    req.session.user = {
-      _id: user._id,
-      handle: user.handle
-    };
-    
-    // Save the session
-    await new Promise((resolve, reject) => {
-      req.session.save(err => {
-        if (err) reject(err);
-        else resolve();
+
+    // ✅ LOG USER INTO SESSION
+    req.login(user, (err) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ error: "Login failed" });
+      }
+
+      return res.json({
+        success: true,
+        status,
+        user: {
+          id: user._id,
+          handle: user.handle,
+          xpBalance: user.xpBalance,
+          usdBalance: user.usdBalance
+        }
       });
     });
 
-    return res.json({ 
-      status: user ? "logged_in" : "registered",
-      user: {
-        _id: user._id,
-        handle: user.handle
-      }
-    });
-
   } catch (err) {
-    console.error(err);
+    console.error("Auth handle error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });

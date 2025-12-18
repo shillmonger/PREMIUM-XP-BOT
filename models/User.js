@@ -1,4 +1,3 @@
-// In models/User.js
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -16,6 +15,10 @@ const userSchema = new mongoose.Schema({
   usdBalance: {
     type: Number,
     default: 0
+  },
+  lastXpClaim: {
+    type: Date,
+    default: null
   },
   createdAt: {
     type: Date,

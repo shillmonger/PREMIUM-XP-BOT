@@ -71,7 +71,7 @@
           🎁 Claim +1000 XP
         </button>
 
-        <button id="cashoutBtn" class="inline-flex items-center justify-center gap-2
+        <!-- <button id="cashoutBtn" class="inline-flex items-center justify-center gap-2
                  px-6 py-3 rounded-xl
                  bg-gradient-to-r from-green-500/30 to-emerald-500/30
                  border border-emerald-400/40
@@ -81,13 +81,13 @@
                  disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                  onclick="handleCashout()">
           💰 Cashout
-        </button>
+        </button> -->
       </div>
 
       <script>
         function handleCashout() {
           const usdBalance = parseFloat('<%= user.usdBalance || 0 %>');
-          const MIN_CASHOUT = 5000;
+          const MIN_CASHOUT = 1000;
           
           if (usdBalance >= MIN_CASHOUT) {
             // Show the cashout modal
@@ -143,7 +143,7 @@
       </div>
 
       <div class="h-3 rounded-full bg-white/20 overflow-hidden">
-        <div class="h-full w-[20%] bg-gradient-to-r from-orange-400 to-yellow-300"></div>
+        <div class="h-full w-[100%] bg-gradient-to-r from-orange-400 to-yellow-300"></div>
       </div>
     </div>
   </div>

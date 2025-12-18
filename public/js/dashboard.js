@@ -119,24 +119,41 @@ function updateClaimButton() {
 }
 
 // Function to handle daily XP claim
-function claimDailyXP() {
+async function claimDailyXP() {
     if (!canClaimDailyXP()) return;
 
-    // Add XP (e.g., 1000 XP for daily claim)
-    addXP(1000);
+    try {
+        const response = await fetch("/dashboard/claim-daily-xp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    // Update last claim time
-    lastClaim = Date.now();
+        const data = await response.json();
 
-    // Update UI
-    updateClaimButton();
-
-    // Show success message
-    const claimBtn = document.getElementById('claimDailyBtn');
-    if (claimBtn) {
-        claimBtn.textContent = 'Claimed!';
-        claimBtn.disabled = true;
-        setTimeout(updateClaimButton, 2000);
+        if (data.success) {
+            // Update UI with server response
+            setXP(data.xpBalance);
+            updateXPUI();
+            
+            // Update last claim time
+            lastClaim = Date.now();
+            updateClaimButton();
+            
+            // Show success message
+            const claimBtn = document.getElementById('claimDailyBtn');
+            if (claimBtn) {
+                claimBtn.textContent = 'Claimed!';
+                claimBtn.disabled = true;
+                setTimeout(updateClaimButton, 2000);
+            }
+        } else {
+            alert(data.message || 'Failed to claim XP');
+        }
+    } catch (error) {
+        console.error('Error claiming XP:', error);
+        alert('An error occurred while claiming XP');
     }
 }
 
@@ -196,6 +213,7 @@ function initApp() {
     setupClaimButton();
 }
 
+
 // Function to handle XP claim from the Claim Now button
 async function handleClaimNow() {
     const claimBtn = document.getElementById('claimPointsBtn');
@@ -207,13 +225,13 @@ async function handleClaimNow() {
         claimBtn.disabled = true;
         claimBtn.textContent = 'Claiming...';
 
-        const response = await fetch('/dashboard/claim-xp', {
+        const response = await fetch('/dashboard/claim-earned-xp', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json' // Explicitly request JSON
+                'Accept': 'application/json'
             },
-            credentials: 'same-origin' // Include cookies for session
+            credentials: 'same-origin'
         });
 
         // Check if response is HTML (which would be a redirect to login)

@@ -131,7 +131,7 @@
 <script>
   function openCashoutModal() {
     const userBalance = parseFloat('<%= user.usdBalance || 0 %>');
-    const minimumAmount = 5000.00;
+    const minimumAmount = 1000.00;
     
     if (userBalance < minimumAmount) {
       // Show toast message

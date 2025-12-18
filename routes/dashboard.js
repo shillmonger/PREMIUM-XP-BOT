@@ -3,13 +3,10 @@ const router = express.Router();
 const User = require("../models/User");
 const { isAuthenticated } = require('../middleware/auth');
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, (req, res) => {
   try {
-    const user = await User.findOne().sort({ createdAt: -1 });
-
-    if (!user) {
-      return res.redirect("/");
-    }
+    // ✅ THIS IS THE LOGGED-IN USER
+    const user = req.user;
 
     const cashouts = [
       { handle: "stormben@trust", amount: 2500.75, time: "12:50 PM" },
@@ -37,37 +34,95 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Route to handle XP claim
-router.post('/claim-xp', isAuthenticated, async (req, res) => {
+
+
+
+
+// claim-earned-xp (ALWAYS ALLOWED)
+router.post("/claim-earned-xp", isAuthenticated, async (req, res) => {
   try {
-    const userId = req.user._id;
-    const xpToAdd = 1000;
-    
-    // Update user's XP and USD balance
+    await require("../config/db")();
+
+    const user = req.user;
+
+    const xpToClaim = 1000; // or compute dynamically if you want
+
     const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { 
-        $inc: { 
-          xpBalance: xpToAdd,
-          usdBalance: xpToAdd * 0.1 // 1 XP = $0.10
-        } 
+      user._id,
+      {
+        $inc: {
+          xpBalance: xpToClaim,
+          usdBalance: xpToClaim * 0.1
+        }
       },
       { new: true }
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    res.json({ 
-      success: true, 
+    return res.json({
+      success: true,
       xpBalance: updatedUser.xpBalance,
       usdBalance: updatedUser.usdBalance
     });
-  } catch (error) {
-    console.error('Error claiming XP:', error);
-    res.status(500).json({ success: false, message: 'Error claiming XP' });
+
+  } catch (err) {
+    console.error("EARNED XP ERROR:", err);
+    res.status(500).json({ success: false, message: "Error claiming XP" });
   }
 });
+
+
+
+
+
+
+// claim-daily-xp (24 HOURS)
+router.post("/claim-daily-xp", isAuthenticated, async (req, res) => {
+  try {
+    await require("../config/db")();
+
+    const user = req.user;
+    const now = new Date();
+
+    if (user.lastXpClaim) {
+      const diff = now - new Date(user.lastXpClaim);
+      const hours = diff / (1000 * 60 * 60);
+
+      if (hours < 24) {
+        return res.status(400).json({
+          success: false,
+          message: "XP already claimed today"
+        });
+      }
+    }
+
+    const xpToAdd = 1000;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        $inc: {
+          xpBalance: xpToAdd,
+          usdBalance: xpToAdd * 0.1
+        },
+        $set: {
+          lastXpClaim: now
+        }
+      },
+      { new: true }
+    );
+
+    return res.json({
+      success: true,
+      xpBalance: updatedUser.xpBalance,
+      usdBalance: updatedUser.usdBalance
+    });
+
+  } catch (err) {
+    console.error("DAILY XP ERROR:", err);
+    res.status(500).json({ success: false, message: "Error claiming daily XP" });
+  }
+});
+
+
 
 module.exports = router;
