@@ -124,11 +124,12 @@ async function claimDailyXP() {
 
     try {
         const response = await fetch("/dashboard/claim-daily-xp", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    credentials: "include"  // Add this line
+});
 
         const data = await response.json();
 
@@ -225,14 +226,14 @@ async function handleClaimNow() {
         claimBtn.disabled = true;
         claimBtn.textContent = 'Claiming...';
 
-        const response = await fetch('/dashboard/claim-earned-xp', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            credentials: 'same-origin'
-        });
+       const response = await fetch('/dashboard/claim-earned-xp', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    credentials: "include"  // Changed from 'same-origin'
+});
 
         // Check if response is HTML (which would be a redirect to login)
         const contentType = response.headers.get('content-type');

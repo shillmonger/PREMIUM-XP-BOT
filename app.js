@@ -10,6 +10,11 @@ const passport = require("passport");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ===== TRUST PROXY =====
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // trust first proxy (needed for secure cookies)
+}
+
 // ===== MONGODB CONNECTION =====
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -33,9 +38,10 @@ const sessionConfig = {
   store: sessionStore,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  },
+    secure: process.env.NODE_ENV === "production", // only send over HTTPS
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
 };
 
 // ===== MIDDLEWARE =====
