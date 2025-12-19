@@ -95,7 +95,7 @@ router.post("/claim-daily-xp", isAuthenticated, async (req, res) => {
       }
     }
 
-    const xpToAdd = 1000;
+    const xpToAdd = 100; // Changed from 1000 to 100
 
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
