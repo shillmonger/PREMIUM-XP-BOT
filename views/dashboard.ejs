@@ -13,9 +13,9 @@
 
   <!-- TOM DROPDOWN  -->
   <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
-  
+
   <!-- Sonner Toast -->
   <script src="https://unpkg.com/sonner"></script>
   <script>
@@ -54,6 +54,7 @@
         transform: translate(0, 0) scale(0.8);
         opacity: 1;
       }
+
       100% {
         transform: translate(0, -100px) scale(1.2);
         opacity: 0;
@@ -122,66 +123,66 @@
 
 
 
-         <!-- CASHOUT BUTTON -->
-<button onclick="openCashoutModal()"
-  class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
-  CASHOUT
-</button>
-<%- include('partials/cashout-modal') %>
-<script>
-  function openCashoutModal() {
-    const userBalance = parseFloat('<%= user.usdBalance || 0 %>');
-    const minimumAmount = 1000.00;
-    
-    if (userBalance < minimumAmount) {
-      // Show toast message
-      const toast = document.createElement('div');
-      toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center';
-      toast.innerHTML = `
+          <!-- CASHOUT BUTTON -->
+          <button onclick="openCashoutModal()"
+            class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#1a6fff] to-[#3bd3a8] font-bold shadow-lg">
+            CASHOUT
+          </button>
+          <%- include('partials/cashout-modal') %>
+            <script>
+              function openCashoutModal() {
+                const userBalance = parseFloat('<%= user.usdBalance || 0 %>');
+                const minimumAmount = 1000.00;
+
+                if (userBalance < minimumAmount) {
+                  // Show toast message
+                  const toast = document.createElement('div');
+                  toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center';
+                  toast.innerHTML = `
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         You need at least $${minimumAmount.toFixed(2)} to cash out. Current balance: $${userBalance.toFixed(2)}`;
-      
-      document.body.appendChild(toast);
-      
-      // Remove toast after 5 seconds
-      setTimeout(() => {
-        toast.remove();
-      }, 5000);
-      
-      return; // Don't open the modal
-    }
-    
-    // If balance is sufficient, open the cashout modal
-    document.getElementById('cashoutModal').classList.remove('hidden');
-    document.body.classList.add('overflow-hidden');
-  }
 
-  function closeCashoutModal() {
-    document.getElementById('cashoutModal').classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-  }
-</script>
+                  document.body.appendChild(toast);
 
+                  // Remove toast after 5 seconds
+                  setTimeout(() => {
+                    toast.remove();
+                  }, 5000);
 
+                  return; // Don't open the modal
+                }
 
-
-          <!-- REFERRAL BUTTON -->
-          <button onclick="openReferralModal()"
-            class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#ff4fd8] to-[#ff7a4f] font-bold shadow-lg">
-            REFERRAL
-          </button>
-          <%- include('partials/referral-modal') %>
-            <script>
-              function openReferralModal() {
-                document.getElementById('referralModal').classList.remove('hidden');
+                // If balance is sufficient, open the cashout modal
+                document.getElementById('cashoutModal').classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
               }
 
-              function closeReferralModal() {
-                document.getElementById('referralModal').classList.add('hidden');
+              function closeCashoutModal() {
+                document.getElementById('cashoutModal').classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
               }
             </script>
+
+
+
+
+            <!-- REFERRAL BUTTON -->
+            <button onclick="openReferralModal()"
+              class="flex-1 py-4 rounded-xl bg-gradient-to-r from-[#ff4fd8] to-[#ff7a4f] font-bold shadow-lg">
+              REFERRAL
+            </button>
+            <%- include('partials/referral-modal') %>
+              <script>
+                function openReferralModal() {
+                  document.getElementById('referralModal').classList.remove('hidden');
+                }
+
+                function closeReferralModal() {
+                  document.getElementById('referralModal').classList.add('hidden');
+                }
+              </script>
 
       </section>
 
@@ -237,21 +238,20 @@
 
 
       <!-- Energy Bar -->
-<section class="mt-16">
-  <div class="flex font-bold justify-between text-xs opacity-80 mb-2">
-    <span class="text-[14px]">Energy</span>
-    <span class="text-[14px]">
-      <span id="energyAmount">1000</span> ⚡
-    </span>
-  </div>
+      <section class="mt-16">
+        <div class="flex font-bold justify-between text-xs opacity-80 mb-2">
+          <span class="text-[14px]">Energy</span>
+          <span class="text-[14px]">
+            <span id="energyAmount">1000</span> ⚡
+          </span>
+        </div>
 
-  <div class="h-5 w-full rounded-full bg-white/20 overflow-hidden">
-    <div
-      id="energyBar"
-      class="h-full w-full bg-gradient-to-r from-[#2da8ff] to-[#6af5ff] transition-all duration-300">
-    </div>
-  </div>
-</section>
+        <div class="h-5 w-full rounded-full bg-white/20 overflow-hidden">
+          <div id="energyBar"
+            class="h-full w-full bg-gradient-to-r from-[#2da8ff] to-[#6af5ff] transition-all duration-300">
+          </div>
+        </div>
+      </section>
 
 
 
@@ -260,6 +260,8 @@
 
 
 
+ <!-- Telegram Support Button -->
+    <%- include('partials/contactus') %>
   </main>
 
 
@@ -267,156 +269,158 @@
 
 
 
-<div id="xpContainer"></div>
-<script src="/js/dashboard.js"></script>
+  <div id="xpContainer"></div>
+  <script src="/js/dashboard.js"></script>
 
 
 
-    <!-- Claim Points Modal -->
-    <div id="claimPointsModal" class="claim-modal">
-      <div class="claim-modal-content">
-        <h2>Claim Your Points!</h2>
-        <p>You've accumulated enough XP to claim your rewards!</p>
-        <div class="claim-amount" id="claimAmount">1000 XP</div>
-        <button id="claimPointsBtn" class="claim-button">Claim Now</button>
-      </div>
+  <!-- Claim Points Modal -->
+  <div id="claimPointsModal" class="claim-modal">
+    <div class="claim-modal-content">
+      <h2>Claim Your Points!</h2>
+      <p>You've accumulated enough XP to claim your rewards!</p>
+      <div class="claim-amount" id="claimAmount">1000 XP</div>
+      <button id="claimPointsBtn" class="claim-button">Claim Now</button>
     </div>
+  </div>
 
-    <style>
-      /* Claim Points Modal */
-      .claim-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+  <style>
+    /* Claim Points Modal */
+    .claim-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .claim-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .claim-modal-content {
+      background: linear-gradient(135deg, #0a2a78 0%, #1c6ae4 100%);
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .claim-modal.active .claim-modal-content {
+      transform: translateY(0);
+    }
+
+    .claim-modal h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .claim-amount {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #00ff9d;
+      margin: 1rem 0;
+      text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    }
+
+    .claim-button {
+      background: linear-gradient(90deg, #00ff9d 0%, #00ccff 100%);
+      border: none;
+      color: #000;
+      font-weight: bold;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+    }
+
+    .claim-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 255, 157, 0.4);
+    }
+
+    .claim-button:active {
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    // Function to show claim points modal
+    function showClaimPointsModal() {
+      const modal = document.getElementById('claimPointsModal');
+      const claimAmount = document.getElementById('claimAmount');
+      const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
+
+      if (currentXP >= 1000) {
+        claimAmount.textContent = '1000 XP';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
       }
+    }
 
-      .claim-modal.active {
-        opacity: 1;
-        visibility: visible;
+    // Function to close claim points modal
+    function closeClaimPointsModal() {
+      const modal = document.getElementById('claimPointsModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('claimPointsModal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeClaimPointsModal();
       }
+    });
 
-      .claim-modal-content {
-        background: linear-gradient(135deg, #0a2a78 0%, #1c6ae4 100%);
-        padding: 2rem;
-        border-radius: 1rem;
-        text-align: center;
-        max-width: 90%;
-        width: 400px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transform: translateY(20px);
-        transition: transform 0.3s ease;
-      }
+    // Handle claim points button click
+    document.getElementById('claimPointsBtn').addEventListener('click', function () {
+      const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
+      if (currentXP >= 1000) {
+        // Deduct 1000 XP
+        const newXP = currentXP - 1000;
+        document.getElementById('xpAmount').textContent = newXP.toFixed(2);
 
-      .claim-modal.active .claim-modal-content {
-        transform: translateY(0);
-      }
+        // Update USD amount
+        const usdAmount = newXP * 0.1; // Assuming XP_TO_USD_RATE is 0.1
+        document.getElementById('usdAmount').textContent = `≈ $${usdAmount.toFixed(2)}`;
 
-      .claim-modal h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: #fff;
-      }
+        // Show success message
+        const claimBtn = document.getElementById('claimPointsBtn');
+        claimBtn.textContent = 'Claimed!';
+        claimBtn.disabled = true;
 
-      .claim-amount {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #00ff9d;
-        margin: 1rem 0;
-        text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
-      }
-
-      .claim-button {
-        background: linear-gradient(90deg, #00ff9d 0%, #00ccff 100%);
-        border: none;
-        color: #000;
-        font-weight: bold;
-        padding: 0.75rem 2rem;
-        border-radius: 9999px;
-        cursor: pointer;
-        font-size: 1rem;
-        margin-top: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
-      }
-
-      .claim-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 255, 157, 0.4);
-      }
-
-      .claim-button:active {
-        transform: translateY(0);
-      }
-    </style>
-
-    <script>
-      // Function to show claim points modal
-      function showClaimPointsModal() {
-        const modal = document.getElementById('claimPointsModal');
-        const claimAmount = document.getElementById('claimAmount');
-        const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
-        
-        if (currentXP >= 1000) {
-          claimAmount.textContent = '1000 XP';
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }
-      }
-
-      // Function to close claim points modal
-      function closeClaimPointsModal() {
-        const modal = document.getElementById('claimPointsModal');
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      }
-
-      // Close modal when clicking outside
-      document.getElementById('claimPointsModal').addEventListener('click', function(e) {
-        if (e.target === this) {
+        // Close modal after delay
+        setTimeout(() => {
           closeClaimPointsModal();
-        }
-      });
-
-      // Handle claim points button click
-      document.getElementById('claimPointsBtn').addEventListener('click', function() {
-        const currentXP = parseFloat(document.getElementById('xpAmount').textContent);
-        if (currentXP >= 1000) {
-          // Deduct 1000 XP
-          const newXP = currentXP - 1000;
-          document.getElementById('xpAmount').textContent = newXP.toFixed(2);
-          
-          // Update USD amount
-          const usdAmount = newXP * 0.1; // Assuming XP_TO_USD_RATE is 0.1
-          document.getElementById('usdAmount').textContent = `≈ $${usdAmount.toFixed(2)}`;
-          
-          // Show success message
-          const claimBtn = document.getElementById('claimPointsBtn');
-          claimBtn.textContent = 'Claimed!';
-          claimBtn.disabled = true;
-          
-          // Close modal after delay
+          // Reset button after modal closes
           setTimeout(() => {
-            closeClaimPointsModal();
-            // Reset button after modal closes
-            setTimeout(() => {
-              claimBtn.textContent = 'Claim Now';
-              claimBtn.disabled = false;
-            }, 300);
-          }, 1000);
-        }
-      });
-    </script>
-  </body>
+            claimBtn.textContent = 'Claim Now';
+            claimBtn.disabled = false;
+          }, 300);
+        }, 1000);
+      }
+    });
+  </script>
+
+</body>
+
 </html>

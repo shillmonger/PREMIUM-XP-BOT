@@ -2,7 +2,7 @@
 
 /* ===== CONFIG ===== */
 const XP_PER_TAP = 20;
-const XP_TO_USD_RATE = 0.1;
+const XP_TO_USD_RATE = 0.5;
 
 const MAX_ENERGY = 1000;
 const ENERGY_PER_TAP = 20;
