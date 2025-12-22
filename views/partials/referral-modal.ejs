@@ -36,9 +36,9 @@
             class="bg-white rounded-xl p-4 mb-6 border border-purple-200/50 shadow-md shadow-purple-100/50 flex items-center justify-between">
             <div>
                 <span class="text-lg font-semibold text-gray-700 block">Friends Invited:</span>
-                <span class="text-sm text-gray-500">Invite more friends to earn bonus rewards!</span>
+                <span class="text-sm text-gray-500">Invite more friends to earn 200 XP each!</span>
             </div>
-            <span class="text-4xl font-extrabold text-purple-600">0</span>
+            <span class="text-4xl font-extrabold text-purple-600"><%= user.referralCount || 0 %></span>
         </div>
 
 
@@ -50,12 +50,16 @@
             </label>
 
             <div class="flex gap-2">
-                <input id="referralLinkInput" type="text" value="Referral link will be available soon..." readonly
-                    class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600" />
+                <input id="referralLinkInput" type="text" 
+    value="<%= protocol %>://<%= host %>?ref=<%= user.referralCode %>" 
+    class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-600" />
 
-                <button onclick="copyReferralLink()" class="px-5 py-3 bg-blue-500 text-white rounded-xl font-bold">
+                <button onclick="copyReferralLink()" class="px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold transition-colors">
                     Copy
                 </button>
+            </div>
+            <div id="copySuccess" class="hidden mt-2 text-green-600 text-sm font-medium text-center">
+                Link copied to clipboard!
             </div>
         </div>
 
@@ -94,7 +98,7 @@
                         3</div>
                     <div>
                         <div class="text-base font-semibold text-gray-800">Earn bonus rewards</div>
-                        <div class="text-sm text-gray-500">Get XP for each friend who joins</div>
+                        <div class="text-sm text-gray-500">Get 200 XP for each friend who joins using your link</div>
                     </div>
                 </div>
             </div>
@@ -105,18 +109,16 @@
         <!-- SHEAR BUTTON  -->
         <div class="flex gap-4">
             <!-- Twitter -->
-            <button
+            <button onclick="shareOnTwitter()"
                 class="flex-1 flex items-center justify-center gap-3 py-3 bg-[#1DA1F2] text-white rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-blue-300/50">
-
                 <img src="https://i.postimg.cc/ydkM1D2Q/Twitter-Logo.png" alt="Twitter"
                     class="w-8 h-8 object-contain" />
                 Twitter
             </button>
 
             <!-- Telegram -->
-            <button
+            <button onclick="shareOnTelegram()"
                 class="flex-1 flex items-center justify-center gap-3 py-3 bg-[#2AABEE] text-white rounded-xl font-bold text-lg hover:opacity-90 transition shadow-lg shadow-sky-300/50">
-
                 <img src="https://i.postimg.cc/8zGgRPrr/Telegram-Logo.png" alt="Telegram"
                     class="w-8 h-8 object-contain" />
                 Telegram
@@ -126,3 +128,6 @@
 
     </div>
 </div>
+
+<!-- Include the referral JavaScript -->
+<script src="/js/referral.js"></script>

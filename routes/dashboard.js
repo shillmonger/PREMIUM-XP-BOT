@@ -23,7 +23,9 @@ router.get("/", isAuthenticated, (req, res) => {
 
     return res.render("dashboard", {
       user,
-      cashouts
+      cashouts,
+      host: req.get('host'),
+      protocol: req.protocol
     });
 
   } catch (error) {

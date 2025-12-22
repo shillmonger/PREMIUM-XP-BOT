@@ -147,6 +147,7 @@
                 placeholder="Enter Your handle (ends with @trust)"
                 class="w-full py-4 px-6 rounded-xl bg-white/10 text-white placeholder-white/70 border-2 border-white/30 focus:border-white focus:outline-none transition"
             />
+            <input type="hidden" id="referral-code" value="">
         </div>
 
         <button id="main-action-button" class="mt-8 w-full max-w-md py-5 rounded-xl bg-trust-btn shadow-2xl shadow-blue-500/20 flex items-center justify-center gap-3 text-xl font-bold hover:opacity-95 transition hover:scale-[1.01] duration-300">
@@ -164,57 +165,99 @@
     </div>
 
    <script>
-  const button = document.getElementById('main-action-button');
-  const inputContainer = document.getElementById('input-container');
-  let isInputVisible = false;
-
-  button.addEventListener('click', async () => {
-    if (!isInputVisible) {
+  // Get referral code from URL if it exists
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  if (refCode) {
+    const refInput = document.getElementById('referral-code');
+    if (refInput) {
+      refInput.value = refCode;
+    }
+    // Auto-show the input field if there's a referral code
+    const inputContainer = document.getElementById('input-container');
+    if (inputContainer) {
       inputContainer.classList.remove('hidden');
-      button.innerHTML = 'Submit';
-      isInputVisible = true;
-      document.getElementById('trust-wallet-handle').focus();
-    } else {
-      const handle = document.getElementById('trust-wallet-handle').value.trim();
+      const mainButton = document.getElementById('main-action-button');
+      if (mainButton) {
+        mainButton.textContent = 'Submit Handle';
+      }
+      const handleInput = document.getElementById('trust-wallet-handle');
+      if (handleInput) {
+        handleInput.focus();
+      }
+    }
+  }
 
-      if (!handle) {
-        showToast('Please enter your Trust Wallet handle.');
+  document.addEventListener('DOMContentLoaded', function() {
+    const mainButton = document.getElementById('main-action-button');
+    if (!mainButton) return;
+
+    mainButton.addEventListener('click', async function() {
+      const inputContainer = document.getElementById('input-container');
+      if (!inputContainer) return;
+
+      if (inputContainer.classList.contains('hidden')) {
+        inputContainer.classList.remove('hidden');
+        this.textContent = 'Submit Handle';
+        const handleInput = document.getElementById('trust-wallet-handle');
+        if (handleInput) handleInput.focus();
+        return;
+      }
+
+      const handle = document.getElementById('trust-wallet-handle')?.value.trim();
+      const referralCode = document.getElementById('referral-code')?.value;
+      
+      if (!handle || !handle.endsWith('@trust')) {
+        showToast('Please enter a valid Trust Wallet handle (must end with @trust)');
         return;
       }
 
       try {
-        const res = await fetch("/auth/handle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ handle })
+        const response = await fetch('/auth/handle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            handle: handle,
+            referralCode: referralCode || undefined
+          })
         });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          showToast(data.error || "Something went wrong");
-          return;
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showToast(
+            data.status === "registered" 
+              ? "Handle registered successfully!" 
+              : "Welcome back!"
+          );
+          
+          if (data.redirect) {
+            setTimeout(() => {
+              window.location.href = data.redirect;
+            }, 500);
+          }
+        } else {
+          showToast(data.error || 'An error occurred. Please try again.');
         }
-
-        showToast(
-          data.status === "registered"
-            ? "Handle registered successfully"
-            : "Welcome back"
-        );
-
-        // ✅ Redirect to dashboard after short delay
-setTimeout(() => {
-  if (data.redirect) {
-    window.location.href = data.redirect;
-  }
-}, 500);
-
-      } catch (err) {
-        showToast("Network error");
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('Network error. Please check your connection.');
       }
+    });
+
+    // Handle Enter key in input field
+    const handleInput = document.getElementById('trust-wallet-handle');
+    if (handleInput) {
+      handleInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('main-action-button')?.click();
+        }
+      });
     }
   });
-</script>
+  </script>
 
 </body>
 </html>
