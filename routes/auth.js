@@ -36,8 +36,8 @@ router.post("/handle", async (req, res) => {
       // Register
       const newUserData = { 
         handle,
-        xpBalance: 100,  // Add 50 XP for new registration
-        usdBalance: 50   // Add $25 USD equivalent
+        xpBalance: 200,  // Add 50 XP for new registration
+        usdBalance: 100   // Add $25 USD equivalent
       };
       
       // Generate a unique referral code
